@@ -16,8 +16,9 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
         public float WhiskersSpan { get; set; }
 
-        public DynamicAvoidObstacle()
+        public DynamicAvoidObstacle(GameObject obstacle)
         {
+            CollisionDetector = obstacle.GetComponent<Collider>();
             this.Target = new KinematicData();
         }
 

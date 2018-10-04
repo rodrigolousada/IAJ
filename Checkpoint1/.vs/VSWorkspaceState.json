@@ -7,6 +7,6 @@
     "\\Assets\\Scripts\\IAJ.Unity\\Movement",
     "\\Assets\\Scripts\\IAJ.Unity\\Movement\\DynamicMovement"
   ],
-  "SelectedNode": "\\Assets\\Scripts\\IAJ.Unity\\Movement\\DynamicMovement\\DynamicArrive.cs",
+  "SelectedNode": "\\Assets\\Scripts\\MainCharacterController.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -37,7 +37,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             var deltaPos = this.Target.Position - this.Character.Position;
             var deltaVel = this.Target.velocity - this.Character.velocity;
             var deltaSqrSpeed = deltaVel.sqrMagnitude;
-            if (deltaSqrSpeed < 0.01)
+            if (deltaSqrSpeed == 0)
                 return output;
             var timeToClosest = -Vector3.Dot(deltaPos, deltaVel) / deltaSqrSpeed;
             if (timeToClosest > MaxTimeLookAhead)
@@ -55,7 +55,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
                 output.linear = futureDeltaPos * -1;
 
             output.linear = output.linear.normalized * MaxAcceleration;
-            Debug.DrawRay(this.Character.Position, output.linear.normalized, DebugColor);
+            Debug.DrawLine(this.Character.Position, output.linear.normalized, DebugColor);
             return output;
 
 

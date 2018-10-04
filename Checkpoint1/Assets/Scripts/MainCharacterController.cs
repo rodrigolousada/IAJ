@@ -16,14 +16,12 @@ public class MainCharacterController : MonoBehaviour {
     private const float MAX_ACCELERATION = 40.0f;
     private const float MAX_SPEED = 20.0f;
     private const float DRAG = 0.1f;
-    private const float MAX_LOOK_AHEAD = 10.0f;
+    private const float MAX_LOOK_AHEAD = 5.0f;
     private const float AVOID_MARGIN = 5.0f;
-    private const float MAX_WHISKERS_LENGTH = 4.0f;
+    private const float MAX_WHISKERS_LENGTH = 3.0f;
     private const float MAX_WHISKERS_SPAN = 50.0f;
-    private const float COLLISION_RADIUS = 5.0f;
+    private const float COLLISION_RADIUS = 2.0f;
     private const float MAX_TIME_LOOK_AHEAD = 1.0f;
-
-
 
     public KeyCode stopKey = KeyCode.S;
     public KeyCode priorityKey = KeyCode.P;
@@ -66,10 +64,9 @@ public class MainCharacterController : MonoBehaviour {
         foreach (var obstacle in obstacles)
         {
             //TODO: add your AvoidObstacle movement here
-            var avoidObstacleMovement = new DynamicAvoidObstacle() //(obstacle) 
+            var avoidObstacleMovement = new DynamicAvoidObstacle(obstacle) 
             {
                 MaxAcceleration = MAX_ACCELERATION,
-                CollisionDetector = obstacle.GetComponent<Collider>(),
                 AvoidMargin = AVOID_MARGIN,
                 MaxLookAhead = MAX_LOOK_AHEAD,
                 WhiskersLength = MAX_WHISKERS_LENGTH,
