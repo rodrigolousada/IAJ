@@ -47,19 +47,19 @@ namespace Assets.Scripts.IAJ.Unity.Movement.VO
                 var distancePenalty = (desiredVelocity - sample).magnitude;
                 var maximumTimePenalty = 0f;
                 foreach (var b in this.Characters) {
-            //        var deltaP = b.Position - this.Character.Position;
-            //        if (deltaP.magnitude > IgnoreDistance) //we can safely ignore this character
-            //            continue;
-            //        //test the collision of the ray λ(pA,2vA’-vA-vB) with the circle
-            //        var rayVector = 2 * sample - this.Character.velocity - b.velocity;
-            //        var tc = MathHelper.TimeToCollisionBetweenRayAndCircle(this.Character.Position, rayVector.normalized, b.Position, CharacterSize * 2);
-            //        var timePenalty = 0f; //no collision
-            //        if (tc > 0)//future collision
-            //            timePenalty = Weight / tc;
-            //        else if (tc == 0) //immediate collision
-            //            timePenalty = float.MaxValue;
-            //        if (timePenalty > maximumTimePenalty) //opportunity for optimization here
-            //            maximumTimePenalty = timePenalty;
+                    var deltaP = b.Position - this.Character.Position;
+                    if (deltaP.magnitude > IgnoreDistance) //we can safely ignore this character
+                        continue;
+                    //test the collision of the ray λ(pA,2vA’-vA-vB) with the circle
+                    var rayVector = 2 * sample - this.Character.velocity - b.velocity;
+                    var tc = MathHelper.TimeToCollisionBetweenRayAndCircle(this.Character.Position, rayVector, b.Position, CharacterSize * 2);
+                    var timePenalty = 0f; //no collision
+                    if (tc > 0)//future collision
+                        timePenalty = Weight / tc;
+                    else if (tc == 0) //immediate collision
+                        timePenalty = float.MaxValue;
+                    if (timePenalty > maximumTimePenalty) //opportunity for optimization here
+                        maximumTimePenalty = timePenalty;
                 }
 
                 var penalty = distancePenalty + maximumTimePenalty;
