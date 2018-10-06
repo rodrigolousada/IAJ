@@ -20,8 +20,9 @@ public class MainCharacterController : MonoBehaviour {
     private const float AVOID_MARGIN = 5.0f;
     private const float MAX_WHISKERS_LENGTH = 3.0f;
     private const float MAX_WHISKERS_SPAN = 50.0f;
-    private const float COLLISION_RADIUS = 2.0f;
+    private const float COLLISION_RADIUS = 1.0f;
     private const float MAX_TIME_LOOK_AHEAD = 1.0f;
+    private const float RVO_WEIGHT = 150.0f;
 
     public KeyCode stopKey = KeyCode.S;
     public KeyCode priorityKey = KeyCode.P;
@@ -111,8 +112,11 @@ public class MainCharacterController : MonoBehaviour {
         this.rvoMovement = new RVOMovement(this.patrolMovement, characters.Select(c => c.KinematicData).ToList(), obstacles.Select(o => new StaticData(o.transform)).ToList())
         {
             Character = this.character.KinematicData,
+            CharacterSize = 2f,
+            IgnoreDistance = 0f,
             MaxAcceleration = MAX_ACCELERATION,
             MaxSpeed = MAX_SPEED,
+            Weight = RVO_WEIGHT,
         };
 
         this.priorityMovement.Movements.Add(patrolMovement);

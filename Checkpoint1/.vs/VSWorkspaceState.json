@@ -5,8 +5,10 @@
     "\\Assets\\Scripts",
     "\\Assets\\Scripts\\IAJ.Unity",
     "\\Assets\\Scripts\\IAJ.Unity\\Movement",
-    "\\Assets\\Scripts\\IAJ.Unity\\Movement\\DynamicMovement"
+    "\\Assets\\Scripts\\IAJ.Unity\\Movement\\DynamicMovement",
+    "\\Assets\\Scripts\\IAJ.Unity\\Movement\\VO",
+    "\\Assets\\Scripts\\IAJ.Unity\\Util"
   ],
-  "SelectedNode": "\\Assets\\Scripts\\MainCharacterController.cs",
+  "SelectedNode": "\\Assets\\Scripts\\IAJ.Unity\\Movement\\VO\\RVOMovement.cs",
   "PreviewInSolutionExplorer": false
 }

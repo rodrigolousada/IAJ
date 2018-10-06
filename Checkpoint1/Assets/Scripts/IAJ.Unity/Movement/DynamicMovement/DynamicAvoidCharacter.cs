@@ -55,7 +55,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
                 output.linear = futureDeltaPos * -1;
 
             output.linear = output.linear.normalized * MaxAcceleration;
-            Debug.DrawLine(this.Character.Position, output.linear.normalized, DebugColor);
+            Debug.DrawRay(this.Character.Position, output.linear, DebugColor);
             return output;
 
 
