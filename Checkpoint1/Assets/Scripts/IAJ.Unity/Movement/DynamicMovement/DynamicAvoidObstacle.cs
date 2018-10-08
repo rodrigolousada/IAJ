@@ -66,7 +66,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
                 Debug.DrawRay(this.Character.Position, rightWhisker * WhiskersLength, DebugColor);
 
                 RaycastHit hit;
-                Ray ray = new Ray(this.Character.Position, centralRay.normalized);
+                Ray ray = new Ray(this.Character.Position, centralRay);
                 var collision = CollisionDetector.Raycast(ray, out hit, MaxLookAhead);
 
                 if (!collision)
