@@ -61,6 +61,22 @@ namespace Assets.Scripts.IAJ.Unity.Movement.VO
                     if (timePenalty > maximumTimePenalty) //opportunity for optimization here
                         maximumTimePenalty = timePenalty;
                 }
+                foreach (var b in this.Obstacles)
+                {
+                    var deltaP = b.Position - this.Character.Position;
+                    if (deltaP.magnitude > IgnoreDistance) //we can safely ignore this character
+                        continue;
+                    //test the collision of the ray λ(pA,2vA’-vA-vB) with the circle
+                    var rayVector = sample;
+                    var tc = MathHelper.TimeToCollisionBetweenRayAndCircle(this.Character.Position, rayVector, b.Position, CharacterSize * 2);
+                    var timePenalty = 0f; //no collision
+                    if (tc > 0)//future collision
+                        timePenalty = Weight / tc;
+                    else if (tc == 0) //immediate collision
+                        timePenalty = float.MaxValue;
+                    if (timePenalty > maximumTimePenalty) //opportunity for optimization here
+                        maximumTimePenalty = timePenalty;
+                }
 
                 var penalty = distancePenalty + maximumTimePenalty;
                 if (penalty < minimumPenalty) { //opportunity for optimization here

@@ -13,17 +13,17 @@ public class MainCharacterController : MonoBehaviour {
 
     public const float X_WORLD_SIZE = 55;
     public const float Z_WORLD_SIZE = 32.5f;
-    private const float MAX_ACCELERATION = 40.0f;
-    private const float MAX_SPEED = 20.0f;
+    private const float MAX_ACCELERATION = 30.0f;
+    private const float MAX_SPEED = 10.0f;
     private const float DRAG = 0.1f;
     private const float MAX_LOOK_AHEAD = 5.0f;
     private const float AVOID_MARGIN = 5.0f;
     private const float MAX_WHISKERS_LENGTH = 3.0f;
     private const float MAX_WHISKERS_SPAN = 50.0f;
-    private const float COLLISION_RADIUS = 1.0f;
+    private const float COLLISION_RADIUS = 2.0f;
     private const float MAX_TIME_LOOK_AHEAD = 1.0f;
-    private const float RVO_WEIGHT = 10.0f;
-    private const float IGNORE_DISTANCE = 8f;
+    private const float RVO_WEIGHT = 100.0f;
+    private const float IGNORE_DISTANCE = 11f;
     private const float CHARACTER_SIZE = 2f;
     private const int NUMBER_SAMPLES = 1000;
 
