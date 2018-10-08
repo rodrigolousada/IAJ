@@ -20,9 +20,9 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
         public DynamicArrive()
         {
             this.Target = new KinematicData();
-            this.MaxSpeed = 20;
-            this.StopRadius = 5.0f;
-            this.SlowRadius = 15.0f;
+            this.MaxSpeed = 10;
+            this.StopRadius = 7.0f;
+            this.SlowRadius = 25.0f;
             this.DestinationTarget = new KinematicData();
         }
 

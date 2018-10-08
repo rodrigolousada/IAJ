@@ -35,8 +35,11 @@ namespace Assets.Scripts.IAJ.Unity.Movement.VO
             this.Characters = movingCharacters;
             this.Obstacles = obstacles;
             base.Target = new KinematicData();
-
             //initialize other properties if you think is relevant
+        }
+
+        public Vector3 Vec3Subtraction(Vector3 vec1, Vector3 vec2){
+            return new Vector3(vec1.x - vec2.x, vec1.y - vec2.y, vec1.z - vec2.z);
         }
 
         public Vector3 GetBestSample(Vector3 desiredVelocity, List<Vector3> Samples) {
@@ -44,41 +47,54 @@ namespace Assets.Scripts.IAJ.Unity.Movement.VO
             var minimumPenalty = float.MaxValue; //INF
             foreach (var sample in Samples) {
                 //penalty based on the distance to desired velocity
-                var distancePenalty = (desiredVelocity - sample).magnitude;
-                var maximumTimePenalty = 0f;
+
+                var distancePenalty = Vec3Subtraction(desiredVelocity,sample).magnitude;
+
+                var maximumTimePenalty = 2f;
+
+                var characterPos = this.Character.Position;
                 foreach (var b in this.Characters) {
-                    var deltaP = b.Position - this.Character.Position;
+                    var bPos = b.Position;
+
+                    var deltaP = Vec3Subtraction( bPos, characterPos);
+
+
                     if (deltaP.magnitude > IgnoreDistance) //we can safely ignore this character
                         continue;
                     //test the collision of the ray λ(pA,2vA’-vA-vB) with the circle
-                    var rayVector = 2 * sample - this.Character.velocity - b.velocity;
-                    var tc = MathHelper.TimeToCollisionBetweenRayAndCircle(this.Character.Position, rayVector, b.Position, CharacterSize * 2);
+                    var rayVector = Vec3Subtraction( Vec3Subtraction( 2 * sample , this.Character.velocity) , b.velocity);
+
+                    var tc = MathHelper.TimeToCollisionBetweenRayAndCircle(characterPos, rayVector, bPos, CharacterSize * 2);
                     var timePenalty = 0f; //no collision
                     if (tc > 0)//future collision
                         timePenalty = Weight / tc;
-                    else if (tc == 0) //immediate collision
+                    else if (tc < 0.01f && tc >= 0) //immediate collision
                         timePenalty = float.MaxValue;
-                    if (timePenalty > maximumTimePenalty) //opportunity for optimization here
-                        maximumTimePenalty = timePenalty;
+                    maximumTimePenalty = Math.Max(timePenalty, maximumTimePenalty);
+
+  
                 }
                 foreach (var b in this.Obstacles)
                 {
-                    var deltaP = b.Position - this.Character.Position;
+                    var bPos = b.Position;
+                    var deltaP = Vec3Subtraction(bPos, characterPos);
+
                     if (deltaP.magnitude > IgnoreDistance) //we can safely ignore this character
                         continue;
-                    //test the collision of the ray λ(pA,2vA’-vA-vB) with the circle
+                    //test the collision of the ray λ(pA,vA') with the circle
                     var rayVector = sample;
-                    var tc = MathHelper.TimeToCollisionBetweenRayAndCircle(this.Character.Position, rayVector, b.Position, CharacterSize * 2);
+                    var tc = MathHelper.TimeToCollisionBetweenRayAndCircle(characterPos, rayVector, bPos, CharacterSize * 2);
                     var timePenalty = 0f; //no collision
                     if (tc > 0)//future collision
                         timePenalty = Weight / tc;
-                    else if (tc == 0) //immediate collision
+                    else if (tc < 0.01f && tc >= 0) //immediate collision
                         timePenalty = float.MaxValue;
-                    if (timePenalty > maximumTimePenalty) //opportunity for optimization here
-                        maximumTimePenalty = timePenalty;
+                    maximumTimePenalty = Math.Max(timePenalty,maximumTimePenalty);
+
                 }
 
                 var penalty = distancePenalty + maximumTimePenalty;
+
                 if (penalty < minimumPenalty) { //opportunity for optimization here
                     minimumPenalty = penalty;
                     bestSample = sample;
