@@ -1,0 +1,19 @@
+﻿<Properties StartupConfiguration="{1DA3030C-5158-03CE-0B69-0D3957DB9B5E}|">
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/SceneManager.cs">
+    <Files>
+      <File FileName="Assets/Scripts/MainCharacterController.cs" Line="25" Column="40" />
+      <File FileName="Assets/Scripts/IAJ.Unity/Movement/VO/RVOMovement.cs" Line="71" Column="37" />
+      <File FileName="Assets/Scripts/IAJ.Unity/Movement/DynamicMovement/DynamicAvoidObstacle.cs" Line="69" Column="70" />
+      <File FileName="Assets/Scripts/IAJ.Unity/Movement/DynamicMovement/DynamicAvoidCharacter.cs" Line="42" Column="45" />
+      <File FileName="Assets/Scripts/IAJ.Unity/Movement/DynamicMovement/DynamicArrive.cs" Line="25" Column="33" />
+      <File FileName="Assets/Scripts/SceneManager.cs" Line="17" Column="45" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>

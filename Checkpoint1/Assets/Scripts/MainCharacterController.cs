@@ -5,7 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Assets.Scripts.IAJ.Unity.Movement.DynamicMovement;
 using Assets.Scripts.IAJ.Unity.Movement.Arbitration;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using Assets.Scripts.IAJ.Unity.Movement.VO;
 using Assets.Scripts.IAJ.Unity.Movement;
 
@@ -13,19 +13,19 @@ public class MainCharacterController : MonoBehaviour {
 
     public const float X_WORLD_SIZE = 55;
     public const float Z_WORLD_SIZE = 32.5f;
-    private const float MAX_ACCELERATION = 30.0f;
+    private const float MAX_ACCELERATION = 20.0f;
     private const float MAX_SPEED = 10.0f;
     private const float DRAG = 0.1f;
-    private const float MAX_LOOK_AHEAD = 5.0f;
+    private const float MAX_LOOK_AHEAD = 6.0f;
     private const float AVOID_MARGIN = 5.0f;
-    private const float MAX_WHISKERS_LENGTH = 3.0f;
+    private const float MAX_WHISKERS_LENGTH = 4f;
     private const float MAX_WHISKERS_SPAN = 50.0f;
     private const float COLLISION_RADIUS = 2.0f;
     private const float MAX_TIME_LOOK_AHEAD = 1.0f;
-    private const float RVO_WEIGHT = 100.0f;
-    private const float IGNORE_DISTANCE = 11f;
+    private const float RVO_WEIGHT = 150.0f;
+    private const float IGNORE_DISTANCE = 16f;
     private const float CHARACTER_SIZE = 2f;
-    private const int NUMBER_SAMPLES = 1000;
+    private const int NUMBER_SAMPLES = 600;
 
     public KeyCode stopKey = KeyCode.S;
     public KeyCode priorityKey = KeyCode.P;
@@ -78,7 +78,7 @@ public class MainCharacterController : MonoBehaviour {
                 Character = this.character.KinematicData,
                 DebugColor = Color.magenta
             };
-            this.blendedMovement.Movements.Add(new MovementWithWeight(avoidObstacleMovement, 2.0f));
+            this.blendedMovement.Movements.Add(new MovementWithWeight(avoidObstacleMovement, 5.0f));
             this.priorityMovement.Movements.Add(avoidObstacleMovement);
         }
 
@@ -98,7 +98,7 @@ public class MainCharacterController : MonoBehaviour {
                     DebugColor = Color.cyan
                 };
 
-                this.blendedMovement.Movements.Add(new MovementWithWeight(avoidCharacter, 2.0f));
+                this.blendedMovement.Movements.Add(new MovementWithWeight(avoidCharacter, 5.0f));
                 this.priorityMovement.Movements.Add(avoidCharacter);
             }
         }
