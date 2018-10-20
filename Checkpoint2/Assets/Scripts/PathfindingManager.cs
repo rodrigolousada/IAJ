@@ -47,7 +47,7 @@ public class PathfindingManager : MonoBehaviour {
 	{
         this.currentClickNumber = 1;
          
-		this.Initialize(NavigationManager.Instance.NavMeshGraphs[0], new AStarPathfinding(NavigationManager.Instance.NavMeshGraphs[0], new SimpleUnorderedNodeList(), new SimpleUnorderedNodeList(), new ZeroHeuristic()));
+        this.Initialize(NavigationManager.Instance.NavMeshGraphs[0], new AStarPathfinding(NavigationManager.Instance.NavMeshGraphs[0], new SimpleUnorderedNodeList(), new SimpleUnorderedNodeList(), new EuclidianHeuristic()));
     }
 
     // Update is called once per frame
