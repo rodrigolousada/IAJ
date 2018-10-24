@@ -1,11 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Assets",
-    "\\Assets\\Scripts\\IAJ.Unity",
-    "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding",
-    "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\Heuristics"
+    "\\Assets"
   ],
-  "SelectedNode": "\\Assets\\Scripts",
+  "SelectedNode": "\\Checkpoint2-W.sln",
   "PreviewInSolutionExplorer": false
 }
