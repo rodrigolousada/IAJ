@@ -9,7 +9,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
     {
         private Dictionary<NavigationGraphNode, NodeRecord> NodeRecords { get; set; }
 
-        public void SimpleUnorderedNodeList()
+        public SimpleHashMap()
         {
             this.NodeRecords = new Dictionary<NavigationGraphNode, NodeRecord>();
         }
