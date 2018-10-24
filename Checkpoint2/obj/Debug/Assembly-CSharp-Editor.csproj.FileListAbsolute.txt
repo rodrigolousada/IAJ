@@ -1,0 +1,2 @@
+C:\Users\Aubay\Desktop\Tecnico\IAJ\IAJ\Checkpoint2\obj\Debug\Assembly-CSharp-Editor.csprojAssemblyReference.cache
+C:\Users\Aubay\Desktop\Tecnico\IAJ\IAJ\Checkpoint2\obj\Debug\Assembly-CSharp-Editor.csproj.CoreCompileInputs.cache
