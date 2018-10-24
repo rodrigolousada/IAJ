@@ -33,7 +33,7 @@ public class PathfindingManager : MonoBehaviour {
     //public properties
     public AStarPathfinding AStarPathFinding { get; private set; }
 
-    public void Initialize(NavMeshPathGraph navMeshGraph, AStarPathfinding pathfindingAlgorithm)
+    public void Initialize(NavMeshPathGraph navMeshGraph, NodeArrayAStarPathFinding pathfindingAlgorithm)
     {
         this.draw = false;
         this.navMesh = navMeshGraph;
@@ -47,7 +47,7 @@ public class PathfindingManager : MonoBehaviour {
 	{
         this.currentClickNumber = 1;
          
-        this.Initialize(NavigationManager.Instance.NavMeshGraphs[0], new AStarPathfinding(NavigationManager.Instance.NavMeshGraphs[0], new SimpleHashMap(), new SimpleHashMap(), new EuclidianHeuristic()));
+        this.Initialize(NavigationManager.Instance.NavMeshGraphs[0], new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0],  new EuclidianHeuristic())); //new SimpleHashMap(), new SimpleHashMap(),
     }
 
     // Update is called once per frame
