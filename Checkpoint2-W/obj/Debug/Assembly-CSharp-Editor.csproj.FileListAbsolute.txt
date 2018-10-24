@@ -108,7 +108,6 @@ C:\Users\Aubay\Desktop\Tecnico\IAJ\IAJ\Checkpoint2-W\Temp\bin\Debug\UnityEngine.
 C:\Users\Aubay\Desktop\Tecnico\IAJ\IAJ\Checkpoint2-W\Temp\bin\Debug\UnityEngine.XRModule.dll
 C:\Users\Aubay\Desktop\Tecnico\IAJ\IAJ\Checkpoint2-W\Temp\bin\Debug\UnityScript.dll
 C:\Users\Aubay\Desktop\Tecnico\IAJ\IAJ\Checkpoint2-W\Temp\bin\Debug\UnityScript.Lang.dll
-C:\Users\Aubay\Desktop\Tecnico\IAJ\IAJ\Checkpoint2-W\Temp\bin\Debug\UnityVS.VersionSpecific.dll
 C:\Users\Aubay\Desktop\Tecnico\IAJ\IAJ\Checkpoint2-W\Temp\bin\Debug\Unity.Cecil.dll
 C:\Users\Aubay\Desktop\Tecnico\IAJ\IAJ\Checkpoint2-W\Temp\bin\Debug\Unity.SerializationLogic.dll
 C:\Users\Aubay\Desktop\Tecnico\IAJ\IAJ\Checkpoint2-W\Temp\bin\Debug\Unity.DataContract.dll

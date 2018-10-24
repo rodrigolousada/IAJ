@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 {
-    //very simple (and unefficient) implementation of the open/closed sets
     public class SimpleHashMap : IOpenSet, IClosedSet
     {
         private Dictionary<NavigationGraphNode, NodeRecord> NodeRecords { get; set; }
