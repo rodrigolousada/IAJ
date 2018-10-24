@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RAIN.Navigation.Graph;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
@@ -8,9 +9,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
     {
         private Dictionary<NavigationGraphNode, NodeRecord> NodeRecords { get; set; }
 
-        public SimpleUnorderedNodeList()
+        public void SimpleUnorderedNodeList()
         {
-            this.NodeRecords = new Dictionary<NavigationGraphNode, NodeRecord>;
+            this.NodeRecords = new Dictionary<NavigationGraphNode, NodeRecord>();
         }
 
         public void Initialize()
@@ -50,7 +51,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 
         public void RemoveFromOpen(NodeRecord nodeRecord)
         {
-            this.NodeRecords.Remove(nodeRecord);
+            this.NodeRecords.Remove(nodeRecord.node);
         }
 
         public NodeRecord SearchInOpen(NodeRecord nodeRecord)
@@ -58,7 +59,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
             //here I cannot use the == comparer because the nodeRecord will likely be a different computational object
             //and therefore pointer comparison will not work, we need to use Equals
             //LINQ with a lambda expression
-            return this.NodeRecords.FirstOrDefault(n => n.Equals(nodeRecord));
+            NodeRecord node = null;
+            this.NodeRecords.TryGetValue(nodeRecord.node, out node);
+            return node;
         }
 
         public ICollection<NodeRecord> All()
@@ -88,7 +91,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
             //welcome to LINQ guys, for those of you that remember LISP from the AI course, the LINQ Aggregate method is the same as lisp's Reduce method
             //so here I'm just using a lambda that compares the first element with the second and returns the lowest
             //by applying this to the whole list, I'm returning the node with the lowest F value.
-            return this.NodeRecords.Aggregate((nodeRecord1, nodeRecord2) => nodeRecord1.fValue < nodeRecord2.fValue ? nodeRecord1 : nodeRecord2);
+            return this.NodeRecords.Values.Aggregate((nodeRecord1, nodeRecord2) => nodeRecord1.fValue < nodeRecord2.fValue ? nodeRecord1 : nodeRecord2);
         }
     }
 }

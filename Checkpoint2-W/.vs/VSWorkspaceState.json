@@ -2,11 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\Assets",
-    "\\Assets\\Scripts",
     "\\Assets\\Scripts\\IAJ.Unity",
     "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding",
     "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\Heuristics"
   ],
-  "SelectedNode": "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\Heuristics\\EuclidianHeuristic.cs",
+  "SelectedNode": "\\Assets\\Scripts",
   "PreviewInSolutionExplorer": false
 }
