@@ -28,6 +28,16 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding
         protected override void ProcessChildNode(NodeRecord parentNode, NavigationGraphEdge connectionEdge, int edgeIndex)
         {
 			//TODO: Implement this method for the GoalBoundingPathfinding to Work. If you implemented the NodeArrayAStar properly, you wont need to change the search method.
+            if (parentNode != null && GoalBoundingTable != null){
+                var goalBounds = this.GoalBoundingTable.table[parentNode.node.NodeIndex];
+                if(goalBounds != null && edgeIndex <= goalBounds.connectionBounds.Length){
+                    var bounds = goalBounds.connectionBounds[edgeIndex];
+                    if(bounds == null){ //!bounds.PositionInsideBounds(this.GoalPosition)
+                        return;
+                    }
+                }
+            }
+            base.ProcessChildNode(parentNode, connectionEdge, edgeIndex);
 			
         }
     }

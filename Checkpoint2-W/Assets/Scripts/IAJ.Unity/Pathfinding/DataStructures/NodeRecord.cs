@@ -21,6 +21,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 
         //used only for the GoalBounds
         public int StartNodeOutConnectionIndex;
+        public int edgeIndex;
 
         public int CompareTo(NodeRecord other)
         {

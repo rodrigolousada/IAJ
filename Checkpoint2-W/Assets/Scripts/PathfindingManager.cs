@@ -7,6 +7,8 @@ using RAIN.Navigation.NavMesh;
 using RAIN.Navigation.Graph;
 using UnityEditor;
 using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures;
+using Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding;
+using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.GoalBounding;
 
 public class PathfindingManager : MonoBehaviour {
 
@@ -32,13 +34,27 @@ public class PathfindingManager : MonoBehaviour {
 
     //public properties
     public AStarPathfinding AStarPathFinding { get; private set; }
-
-    public void Initialize(NavMeshPathGraph navMeshGraph, NodeArrayAStarPathFinding pathfindingAlgorithm)
+  
+    public void Initialize(NavMeshPathGraph navMeshGraph) // AStarPathfinding pathfindingAlgorithm
     {
         this.draw = false;
         this.navMesh = navMeshGraph;
 
-        this.AStarPathFinding = pathfindingAlgorithm;
+
+        GoalBoundingTable table = Resources.Load("goalboundingtable", typeof(GoalBoundingTable)) as GoalBoundingTable;
+        if (table == null)
+        {
+            Debug.Log("Failed to load Goal Bounding Table, proceeding with regular Node Array A*");
+        }
+
+        this.AStarPathFinding = new GoalBoundingPathfinding(
+        NavigationManager.Instance.NavMeshGraphs[0],
+        new EuclidianHeuristic(),
+        table);
+        System.Diagnostics.Debug.WriteLine("devia funcionar");
+
+
+        //this.AStarPathFinding = new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new EuclidianHeuristic());
         this.AStarPathFinding.NodesPerFrame = 200;
     }
 
@@ -47,7 +63,8 @@ public class PathfindingManager : MonoBehaviour {
 	{
         this.currentClickNumber = 1;
          
-        this.Initialize(NavigationManager.Instance.NavMeshGraphs[0], new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0],  new EuclidianHeuristic())); //new SimpleHashMap(), new SimpleHashMap(),
+        this.Initialize(NavigationManager.Instance.NavMeshGraphs[0] ); //new SimpleHashMap(), new SimpleHashMap(),
+        // new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0],  new EuclidianHeuristic())
     }
 
     // Update is called once per frame

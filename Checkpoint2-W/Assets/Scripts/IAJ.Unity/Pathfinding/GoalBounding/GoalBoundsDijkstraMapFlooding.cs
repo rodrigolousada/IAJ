@@ -18,6 +18,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding
         public NavigationGraphNode StartNode { get; protected set; }
         public NodeGoalBounds NodeGoalBounds { get; protected set; }
         protected NodeRecordArray NodeRecordArray { get; set; }
+        protected List<NavigationGraphNode> Nodes { get; set; }
 
         public IOpenSet Open { get; protected set; }
         public IClosedSet Closed { get; protected set; }
@@ -26,22 +27,98 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding
         {
             this.NavMeshGraph = graph;
             //do not change this
-            var nodes = this.GetNodesHack(graph);
-            this.NodeRecordArray = new NodeRecordArray(nodes);
+            this.Nodes = this.GetNodesHack(graph);
+            this.NodeRecordArray = new NodeRecordArray(this.Nodes);
             this.Open = this.NodeRecordArray;
             this.Closed = this.NodeRecordArray;
         }
 
         public void Search(NavigationGraphNode startNode, NodeGoalBounds nodeGoalBounds)
         {
-			//TODO: Implement the algorithm that calculates the goal bounds using a dijkstra
-			//Given that the nodes in the graph correspond to the edges of a polygon, we won't be able to use the vertices of the polygon to update the bounding boxes
+            //TODO: Implement the algorithm that calculates the goal bounds using a dijkstra
+            //Given that the nodes in the graph correspond to the edges of a polygon, we won't be able to use the vertices of the polygon to update the bounding boxes
+            
+            this.NodeRecordArray = new NodeRecordArray(this.Nodes);
+            NodeRecord lowestCost = null;
+            this.Open = this.NodeRecordArray;
+            this.Closed = this.NodeRecordArray;
+
+            var startConnections = startNode.OutEdgeCount;
+            for (int i = 0; i < startConnections; i++)
+            {
+                //Unnecessary initialization
+                //nodeGoalBounds.connectionBounds[i] = ScriptableObject.CreateInstance<DataStructures.GoalBounding.Bounds>();
+                nodeGoalBounds.connectionBounds[i].InitializeBounds(startNode.Position);
+                this.ProcessChildNode(this.NodeRecordArray.GetNodeRecord(startNode), startNode.EdgeOut(i), i);
+            }
+
+
+
+            while (this.Open.CountOpen() != 0){ 
+                
+                lowestCost = this.Open.GetBestAndRemove();
+                this.Closed.AddToClosed(lowestCost);
+                nodeGoalBounds.connectionBounds[lowestCost.edgeIndex].UpdateBounds(lowestCost.node.Position);
+
+                var connectLowestNode = lowestCost.node.OutEdgeCount;
+                for (int i = 0; i < connectLowestNode; i++){
+                    this.ProcessChildNode(lowestCost, lowestCost.node.EdgeOut(i),lowestCost.edgeIndex);
+                }
+            }
+            this.NodeGoalBounds = nodeGoalBounds;
         }
 
-       
+
         protected void ProcessChildNode(NodeRecord parent, NavigationGraphEdge connectionEdge, int connectionIndex)
         {
-			//TODO: Implement this method that processes a child node. Then you can use it in the Search method above.
+            //TODO: Implement this method that processes a child node. Then you can use it in the Search method above.
+            //------------------------------------------------------------------
+            float f; //function
+            float g; //custo
+
+            var childNode = connectionEdge.ToNode;
+            var childNodeRecord = this.NodeRecordArray.GetNodeRecord(childNode);
+
+            if (childNodeRecord == null)
+            {
+                //this piece of code is used just because of the special start nodes and goal nodes added to the RAIN Navigation graph when a new search is performed.
+                //Since these special goals were not in the original navigation graph, they will not be stored in the NodeRecordArray and we will have to add them
+                //to a special structure
+                //it's ok if you don't understand this, this is a hack and not part of the NodeArrayA* algorithm, just do NOT CHANGE THIS, or your algorithm will not work
+                childNodeRecord = new NodeRecord
+                {
+                    node = childNode,
+                    parent = parent,
+                    edgeIndex = connectionIndex,
+                    status = NodeStatus.Unvisited
+                };
+                this.NodeRecordArray.AddSpecialCaseNode(childNodeRecord);
+            }
+            f = g = parent.gValue + (childNode.LocalPosition - parent.node.LocalPosition).magnitude;
+
+
+            //se nao tivermos melhorias, utilizar isto
+            var statChildNode = childNodeRecord.status;
+            var valueChildNode = childNodeRecord.fValue;
+
+            if (statChildNode == NodeStatus.Unvisited)
+            {
+                childNodeRecord.gValue = g;
+                childNodeRecord.fValue = f;
+                childNodeRecord.parent = parent;
+                childNodeRecord.edgeIndex = connectionIndex;
+                this.Open.AddToOpen(childNodeRecord);
+            }
+            else if (statChildNode == NodeStatus.Open && valueChildNode > f)
+            {
+                childNodeRecord.gValue = g;
+                childNodeRecord.fValue = f;
+                childNodeRecord.parent = parent;
+                childNodeRecord.edgeIndex = connectionIndex;
+
+            }
+
+            //------------------------------------------------------------------
         }
 
         private List<NavigationGraphNode> GetNodesHack(NavMeshPathGraph graph)

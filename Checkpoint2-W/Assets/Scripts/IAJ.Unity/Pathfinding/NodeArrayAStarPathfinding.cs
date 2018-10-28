@@ -48,23 +48,23 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             f = F(g,h);
 
             //se nao tivermos melhorias, utilizar isto
-            var statPrevChild = childNodeRecord.status;
-            var valuePrevChild = childNodeRecord.fValue;
+            var statChildNode = childNodeRecord.status;
+            var valueChildNode = childNodeRecord.fValue;
 
-            if(statPrevChild == NodeStatus.Unvisited){
+            if(statChildNode == NodeStatus.Unvisited){
                 childNodeRecord.gValue = g;
                 childNodeRecord.fValue = f;
                 childNodeRecord.hValue = h;
                 childNodeRecord.parent = bestNode;
                 this.Open.AddToOpen(childNodeRecord);
             }
-            else if (statPrevChild == NodeStatus.Open && valuePrevChild > f){
+            else if (statChildNode == NodeStatus.Open && valueChildNode > f){
                 childNodeRecord.gValue = g;
                 childNodeRecord.fValue = f;
                 childNodeRecord.hValue = h;
                 childNodeRecord.parent = bestNode;
             }
-            else if (statPrevChild == NodeStatus.Closed && valuePrevChild > f){
+            else if (statChildNode == NodeStatus.Closed && valueChildNode > f){
                 childNodeRecord.gValue = g;
                 childNodeRecord.fValue = f;
                 childNodeRecord.hValue = h;
