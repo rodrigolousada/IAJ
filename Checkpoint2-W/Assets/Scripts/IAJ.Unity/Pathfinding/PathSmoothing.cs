@@ -15,18 +15,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             Vector3 endPosition = globalPath.PathPositions[globalPath.PathPositions.Count - 1];
             var globalPathSmooth = new GlobalPath {};
 
-            //Vector3 aux;
-            //if (globalPath.Length == 2)
-            //    return globalPath;
-
-            //globalPathSmooth.PathPositions.Add(start);
-
-            //for (int i = 2; i < globalPath.PathPositions.Count - 1; i++)
-            //{
-            //    if (!Physics.Linecast(globalPathSmooth.PathPositions[globalPathSmooth.PathPositions.Count - 1], globalPath.PathPositions[i]))
-            //        globalPathSmooth.PathPositions.Add(globalPath.PathPositions[i - 1]);
-            //}
-
             int nodesCount = globalPath.PathNodes.Count;
 
             var nrWaypoints = 3;
@@ -36,7 +24,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             Vector3 waypoint3;
 
             var currentPosition = startPosition;
-
             for (int i = 0; i < nodesCount; i++)
             {
                 currentPosition = globalPath.PathNodes[i].LocalPosition;
@@ -64,12 +51,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
                 globalPathSmooth.PathPositions.Add(currentPosition);
             }
-
             globalPathSmooth.PathPositions.Add(endPosition);
 
 			return globalPathSmooth;
 		}
-
-
 	}
 }

@@ -4,8 +4,8 @@
     "\\Assets",
     "\\Assets\\Scripts",
     "\\Assets\\Scripts\\IAJ.Unity",
-    "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding"
+    "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\GoalBounding"
   ],
-  "SelectedNode": "\\Packages",
+  "SelectedNode": "\\Assets\\UnityVS",
   "PreviewInSolutionExplorer": false
 }

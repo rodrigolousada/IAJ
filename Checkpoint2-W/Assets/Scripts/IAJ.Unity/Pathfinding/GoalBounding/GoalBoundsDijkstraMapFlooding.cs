@@ -48,7 +48,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding
             for (int i=0; i < startNode.OutEdgeCount; i++)
             {
                 nodeGoalBounds.connectionBounds[i] = ScriptableObject.CreateInstance<DataStructures.GoalBounding.Bounds>();
-                //nodeGoalBounds.connectionBounds[i].InitializeBounds(startNode.Position);
                 this.ProcessChildNode(this.NodeRecordArray.GetNodeRecord(startNode), startNode.EdgeOut(i), i);
             }
 
