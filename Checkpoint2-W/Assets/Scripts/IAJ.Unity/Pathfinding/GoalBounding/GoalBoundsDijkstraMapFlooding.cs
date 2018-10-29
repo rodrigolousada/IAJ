@@ -3,6 +3,7 @@ using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.GoalBounding;
 using RAIN.Navigation.Graph;
 using RAIN.Navigation.NavMesh;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding
 {
@@ -46,9 +47,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding
 
             for (int i=0; i < startNode.OutEdgeCount; i++)
             {
-                //Unnecessary initialization
-                //nodeGoalBounds.connectionBounds[i] = ScriptableObject.CreateInstance<DataStructures.GoalBounding.Bounds>();
-                nodeGoalBounds.connectionBounds[i].InitializeBounds(startNode.Position);
+                nodeGoalBounds.connectionBounds[i] = ScriptableObject.CreateInstance<DataStructures.GoalBounding.Bounds>();
+                //nodeGoalBounds.connectionBounds[i].InitializeBounds(startNode.Position);
                 this.ProcessChildNode(this.NodeRecordArray.GetNodeRecord(startNode), startNode.EdgeOut(i), i);
             }
 

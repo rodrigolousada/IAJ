@@ -53,7 +53,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                     waypoint2 = Vector3.Lerp(currentPosition, furtherWaypoint, (1 / nrWaypoints * x) / 2);
                     waypoint3 = Vector3.Lerp(currentPosition, furtherWaypoint, (1 / nrWaypoints * x) * 2);
 
-                    if (!(navmesh.IsPointOnGraph(waypoint1, 1) && navmesh.IsPointOnGraph(waypoint2, 1) && navmesh.IsPointOnGraph(waypoint3, 1)))
+                    if (!(navmesh.IsPointOnGraph(waypoint1, 1)) || !(navmesh.IsPointOnGraph(waypoint2, 1) || !(navmesh.IsPointOnGraph(waypoint3, 1))))
                         collision=true;
                 }
 

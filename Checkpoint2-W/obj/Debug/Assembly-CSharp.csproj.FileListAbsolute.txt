@@ -338,3 +338,5 @@ D:\Documentos\Instituto Superior Técnico\MEIC\IAJ\Projectos\IAJ\Checkpoint2-W\o
 D:\Documentos\Instituto Superior Técnico\MEIC\IAJ\Projectos\IAJ\Checkpoint2-W\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 D:\Documentos\Instituto Superior Técnico\MEIC\IAJ\Projectos\IAJ\Checkpoint2-W\obj\Debug\Assembly-CSharp.dll
 D:\Documentos\Instituto Superior Técnico\MEIC\IAJ\Projectos\IAJ\Checkpoint2-W\obj\Debug\Assembly-CSharp.pdb
+D:\Documentos\Instituto Superior Técnico\MEIC\IAJ\Projectos\IAJ\Checkpoint2-W\Temp\bin\Debug\UnityEditor.UI.dll
+D:\Documentos\Instituto Superior Técnico\MEIC\IAJ\Projectos\IAJ\Checkpoint2-W\Temp\bin\Debug\UnityEditor.UI.xml
