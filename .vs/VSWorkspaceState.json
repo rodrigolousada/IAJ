@@ -5,8 +5,9 @@
     "\\Checkpoint2-W\\Assets",
     "\\Checkpoint2-W\\Assets\\Scripts",
     "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity",
-    "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity\\Pathfinding"
+    "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity\\Pathfinding",
+    "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\GoalBounding"
   ],
-  "SelectedNode": "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\PathSmoothing.cs",
+  "SelectedNode": "\\Checkpoint2-W\\Assets\\Scripts\\PathfindingManager.cs",
   "PreviewInSolutionExplorer": false
 }

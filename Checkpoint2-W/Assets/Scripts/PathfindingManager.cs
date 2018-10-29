@@ -165,17 +165,17 @@ public class PathfindingManager : MonoBehaviour {
                     Debug.DrawLine(previousPosition, pathPosition, Color.red);
                     previousPosition = pathPosition;
                 }
-            }
-
-            if (this.currentSolutionSmooth != null)
-            {
-                var previousPosition = this.startPosition;
-                foreach (var pathPosition in this.currentSolutionSmooth.PathPositions)
+                if (this.currentSolutionSmooth != null)
                 {
-                    Debug.DrawLine(previousPosition, pathPosition, Color.green);
-                    previousPosition = pathPosition;
+                    previousPosition = this.startPosition;
+                    foreach (var pathPosition in this.currentSolutionSmooth.PathPositions)
+                    {
+                        Debug.DrawLine(previousPosition, pathPosition, Color.green);
+                        previousPosition = pathPosition;
+                    }
                 }
             }
+
 
             //draw the nodes in Open and Closed Sets
             if (this.AStarPathFinding != null)
