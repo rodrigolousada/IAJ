@@ -27,10 +27,11 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding
         {
             this.NavMeshGraph = graph;
             //do not change this
-            this.Nodes = this.GetNodesHack(graph);
-            this.NodeRecordArray = new NodeRecordArray(this.Nodes);
+            var nodes = this.GetNodesHack(graph);
+            this.NodeRecordArray = new NodeRecordArray(nodes);
             this.Open = this.NodeRecordArray;
             this.Closed = this.NodeRecordArray;
+            this.Nodes = nodes;
         }
 
         public void Search(NavigationGraphNode startNode, NodeGoalBounds nodeGoalBounds)
@@ -43,8 +44,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding
             this.Open = this.NodeRecordArray;
             this.Closed = this.NodeRecordArray;
 
-            var startConnections = startNode.OutEdgeCount;
-            for (int i = 0; i < startConnections; i++)
+            for (int i=0; i < startNode.OutEdgeCount; i++)
             {
                 //Unnecessary initialization
                 //nodeGoalBounds.connectionBounds[i] = ScriptableObject.CreateInstance<DataStructures.GoalBounding.Bounds>();
@@ -52,17 +52,15 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding
                 this.ProcessChildNode(this.NodeRecordArray.GetNodeRecord(startNode), startNode.EdgeOut(i), i);
             }
 
-
-
-            while (this.Open.CountOpen() != 0){ 
+            while (this.Open.CountOpen()!=0){ 
                 
                 lowestCost = this.Open.GetBestAndRemove();
                 this.Closed.AddToClosed(lowestCost);
-                nodeGoalBounds.connectionBounds[lowestCost.edgeIndex].UpdateBounds(lowestCost.node.Position);
+                nodeGoalBounds.connectionBounds[lowestCost.connectionIndex].UpdateBounds(lowestCost.node.Position);
 
                 var connectLowestNode = lowestCost.node.OutEdgeCount;
-                for (int i = 0; i < connectLowestNode; i++){
-                    this.ProcessChildNode(lowestCost, lowestCost.node.EdgeOut(i),lowestCost.edgeIndex);
+                for (int i=0; i < connectLowestNode; i++){
+                    this.ProcessChildNode(lowestCost, lowestCost.node.EdgeOut(i),lowestCost.connectionIndex);
                 }
             }
             this.NodeGoalBounds = nodeGoalBounds;
@@ -89,13 +87,13 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding
                 {
                     node = childNode,
                     parent = parent,
-                    edgeIndex = connectionIndex,
+                    connectionIndex = connectionIndex,
                     status = NodeStatus.Unvisited
                 };
                 this.NodeRecordArray.AddSpecialCaseNode(childNodeRecord);
             }
-            f = g = parent.gValue + (childNode.LocalPosition - parent.node.LocalPosition).magnitude;
 
+            f = g = parent.gValue + (childNode.LocalPosition - parent.node.LocalPosition).magnitude;
 
             //se nao tivermos melhorias, utilizar isto
             var statChildNode = childNodeRecord.status;
@@ -106,7 +104,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding
                 childNodeRecord.gValue = g;
                 childNodeRecord.fValue = f;
                 childNodeRecord.parent = parent;
-                childNodeRecord.edgeIndex = connectionIndex;
+                childNodeRecord.connectionIndex = connectionIndex;
                 this.Open.AddToOpen(childNodeRecord);
             }
             else if (statChildNode == NodeStatus.Open && valueChildNode > f)
@@ -114,7 +112,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding
                 childNodeRecord.gValue = g;
                 childNodeRecord.fValue = f;
                 childNodeRecord.parent = parent;
-                childNodeRecord.edgeIndex = connectionIndex;
+                childNodeRecord.connectionIndex = connectionIndex;
 
             }
 

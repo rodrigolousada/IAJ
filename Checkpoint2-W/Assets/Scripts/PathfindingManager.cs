@@ -30,6 +30,7 @@ public class PathfindingManager : MonoBehaviour {
     private int currentClickNumber;
     
     private GlobalPath currentSolution;
+    private GlobalPath currentSolutionSmooth;
     private bool draw;
 
     //public properties
@@ -40,21 +41,14 @@ public class PathfindingManager : MonoBehaviour {
         this.draw = false;
         this.navMesh = navMeshGraph;
 
-
-        GoalBoundingTable table = Resources.Load("goalboundingtable", typeof(GoalBoundingTable)) as GoalBoundingTable;
-        if (table == null)
+        GoalBoundingTable goalBoundingTable = Resources.Load("goalboundingtable", typeof(GoalBoundingTable)) as GoalBoundingTable;
+        if (goalBoundingTable == null)
         {
-            Debug.Log("Failed to load Goal Bounding Table, proceeding with regular Node Array A*");
+            Debug.Log("NULL table");
+            this.AStarPathFinding = new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new EuclidianHeuristic());
         }
 
-        this.AStarPathFinding = new GoalBoundingPathfinding(
-        NavigationManager.Instance.NavMeshGraphs[0],
-        new EuclidianHeuristic(),
-        table);
-        System.Diagnostics.Debug.WriteLine("devia funcionar");
-
-
-        //this.AStarPathFinding = new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new EuclidianHeuristic());
+        this.AStarPathFinding = new GoalBoundingPathfinding(NavigationManager.Instance.NavMeshGraphs[0], new EuclidianHeuristic(), goalBoundingTable);
         this.AStarPathFinding.NodesPerFrame = 200;
     }
 
@@ -129,8 +123,10 @@ public class PathfindingManager : MonoBehaviour {
         if (this.AStarPathFinding.InProgress)
 	    {
 	        var finished = this.AStarPathFinding.Search(out this.currentSolution);
-	    }
-	}
+            if (finished && this.currentSolution != null)
+                this.currentSolutionSmooth = PathSmoothing.StraighLineSmoothing(this.currentSolution, this.navMesh);
+        }
+    }
 
     public void OnGUI()
     {
@@ -167,6 +163,16 @@ public class PathfindingManager : MonoBehaviour {
                 foreach (var pathPosition in this.currentSolution.PathPositions)
                 {
                     Debug.DrawLine(previousPosition, pathPosition, Color.red);
+                    previousPosition = pathPosition;
+                }
+            }
+
+            if (this.currentSolutionSmooth != null)
+            {
+                var previousPosition = this.startPosition;
+                foreach (var pathPosition in this.currentSolutionSmooth.PathPositions)
+                {
+                    Debug.DrawLine(previousPosition, pathPosition, Color.green);
                     previousPosition = pathPosition;
                 }
             }

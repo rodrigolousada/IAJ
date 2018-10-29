@@ -1,8 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Checkpoint2-W"
+    "\\Checkpoint2-W",
+    "\\Checkpoint2-W\\Assets",
+    "\\Checkpoint2-W\\Assets\\Scripts",
+    "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity",
+    "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity\\Pathfinding"
   ],
-  "SelectedNode": "\\after_optimization.png",
+  "SelectedNode": "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\PathSmoothing.cs",
   "PreviewInSolutionExplorer": false
 }
