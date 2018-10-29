@@ -36,19 +36,12 @@ public class PathfindingManager : MonoBehaviour {
     //public properties
     public AStarPathfinding AStarPathFinding { get; private set; }
   
-    public void Initialize(NavMeshPathGraph navMeshGraph) // AStarPathfinding pathfindingAlgorithm
+    public void Initialize(NavMeshPathGraph navMeshGraph, AStarPathfinding pathfindingAlgorithm)
     {
         this.draw = false;
         this.navMesh = navMeshGraph;
 
-        GoalBoundingTable goalBoundingTable = Resources.Load("goalboundingtable", typeof(GoalBoundingTable)) as GoalBoundingTable;
-        if (goalBoundingTable == null)
-        {
-            Debug.Log("NULL table");
-            this.AStarPathFinding = new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new EuclidianHeuristic());
-        }
-
-        this.AStarPathFinding = new GoalBoundingPathfinding(NavigationManager.Instance.NavMeshGraphs[0], new EuclidianHeuristic(), goalBoundingTable);
+        this.AStarPathFinding = pathfindingAlgorithm;
         this.AStarPathFinding.NodesPerFrame = 200;
     }
 
@@ -56,9 +49,16 @@ public class PathfindingManager : MonoBehaviour {
 	void Awake ()
 	{
         this.currentClickNumber = 1;
-         
-        this.Initialize(NavigationManager.Instance.NavMeshGraphs[0] ); //new SimpleHashMap(), new SimpleHashMap(),
-        // new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0],  new EuclidianHeuristic())
+
+        GoalBoundingTable goalBoundingTable = Resources.Load("goalboundingtable", typeof(GoalBoundingTable)) as GoalBoundingTable;
+
+        //var pathfindingAlgorithm = new AStarPathfinding(NavigationManager.Instance.NavMeshGraphs[0], new SimpleUnorderedNodeList(), new SimpleUnorderedNodeList(), new ZeroHeuristic());
+        //var pathfindingAlgorithm = new AStarPathfinding(NavigationManager.Instance.NavMeshGraphs[0], new SimpleUnorderedNodeList(), new SimpleUnorderedNodeList(), new EuclidianHeuristic());
+        //var pathfindingAlgorithm = new AStarPathfinding(NavigationManager.Instance.NavMeshGraphs[0], new SimpleHashMap(), new SimpleHashMap(), new EuclidianHeuristic());
+        //var pathfindingAlgorithm = new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new EuclidianHeuristic()); 
+        var pathfindingAlgorithm = new GoalBoundingPathfinding(NavigationManager.Instance.NavMeshGraphs[0], new EuclidianHeuristic(), goalBoundingTable);
+
+        this.Initialize(NavigationManager.Instance.NavMeshGraphs[0], pathfindingAlgorithm);
     }
 
     // Update is called once per frame

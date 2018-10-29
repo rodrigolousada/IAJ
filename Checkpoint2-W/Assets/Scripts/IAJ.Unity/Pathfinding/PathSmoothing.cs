@@ -12,7 +12,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         public static GlobalPath StraighLineSmoothing(GlobalPath globalPath, NavMeshPathGraph navmesh)
         {
             Vector3 startPosition = globalPath.PathPositions[0];
-            Vector3 endPosition = globalPath.PathPositions[globalPath.PathPositions.Count - 2];
+            Vector3 endPosition = globalPath.PathPositions[globalPath.PathPositions.Count - 1];
             var globalPathSmooth = new GlobalPath {};
 
             //Vector3 aux;
@@ -27,7 +27,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             //        globalPathSmooth.PathPositions.Add(globalPath.PathPositions[i - 1]);
             //}
 
-            int totalNodes = globalPath.PathNodes.Count;
+            int nodesCount = globalPath.PathNodes.Count;
 
             var nrWaypoints = 3;
             Vector3 furtherWaypoint;
@@ -37,11 +37,11 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
             var currentPosition = startPosition;
 
-            for (int i = 0; i < totalNodes; i++)
+            for (int i = 0; i < nodesCount; i++)
             {
                 currentPosition = globalPath.PathNodes[i].LocalPosition;
                 //FurtherPoint is 3 points after i-point, or endpoint if index out of range
-                if ((i + nrWaypoints) >= totalNodes)
+                if ((i + nrWaypoints) >= nodesCount-1)
                     furtherWaypoint = endPosition;
                 else
                     furtherWaypoint = globalPath.PathNodes[i + nrWaypoints].LocalPosition;
