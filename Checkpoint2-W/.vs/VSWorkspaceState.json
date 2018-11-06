@@ -4,8 +4,12 @@
     "\\Assets",
     "\\Assets\\Scripts",
     "\\Assets\\Scripts\\IAJ.Unity",
-    "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\GoalBounding"
+    "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding",
+    "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\DataStructures",
+    "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\DataStructures\\GoalBounding",
+    "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\GoalBounding",
+    "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\Heuristics"
   ],
-  "SelectedNode": "\\Assets\\UnityVS",
+  "SelectedNode": "\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\GoalBounding\\GoalBoundsDijkstraMapFlooding.cs",
   "PreviewInSolutionExplorer": false
 }
