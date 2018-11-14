@@ -66,7 +66,7 @@ namespace Assets.Scripts
             this.draw = true;
             this.navMesh = navMeshGraph;
             this.AStarPathFinding = pathfindingAlgorithm;
-            this.AStarPathFinding.NodesPerSearch = 100;
+            this.AStarPathFinding.NodesPerFrame = 100;
 
 			this.characterAnimator = this.GetComponentInChildren<Animator> ();
         }
@@ -218,7 +218,7 @@ namespace Assets.Scripts
                 {
                     //lets smooth out the Path
                     this.startPosition = this.Character.KinematicData.position;
-					this.currentSmoothedSolution = StringPullingPathSmoothing.SmoothPath(this.Character.KinematicData.position, this.currentSolution);
+					this.currentSmoothedSolution = PathSmoothing.StraighLineSmoothing(currentSolution, navMesh);
                     this.currentSmoothedSolution.CalculateLocalPathsFromPathPositions(this.Character.KinematicData.position);
 					this.Character.Movement = new DynamicFollowPath(this.Character.KinematicData, this.currentSmoothedSolution)
                     {

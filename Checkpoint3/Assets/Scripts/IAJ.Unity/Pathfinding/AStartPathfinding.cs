@@ -16,6 +16,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         //properties used for debugging purposes
         public uint TotalExploredNodes { get; protected set; }
         public int MaxOpenNodes { get; protected set; }
+      
         public float TotalProcessingTime { get; protected set; }
 
         public bool InProgress { get; protected set; }
