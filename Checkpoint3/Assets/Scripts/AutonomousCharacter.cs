@@ -43,7 +43,7 @@ namespace Assets.Scripts
         public Action CurrentAction { get; private set; }
         public DynamicCharacter Character { get; private set; }
         public DepthLimitedGOAPDecisionMaking GOAPDecisionMaking { get; set; }
-        //public AStarPathfinding AStarPathFinding;
+        public AStarPathfinding AStarPathFinding;
 
         //private fields for internal use only
         private Vector3 startPosition;
