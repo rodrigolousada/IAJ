@@ -9,6 +9,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.IAJ.Unity.Pathfinding.Path;
 using Assets.Scripts.GameManager;
+using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.GoalBounding;
+using Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding;
+using Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics;
 
 namespace Assets.Scripts
 {
@@ -79,13 +82,18 @@ namespace Assets.Scripts
             this.Character = new DynamicCharacter(this.gameObject);
 
             //initialize your pathfinding algorithm here!
-       		//use goalBoundingPathfinding for a more efficient algorithm
-			//this.Initialize(NavigationManager.Instance.NavMeshGraphs[0], new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new EuclideanDistanceHeuristic()));
+            //use goalBoundingPathfinding for a more efficient algorithm
+            //this.Initialize(NavigationManager.Instance.NavMeshGraphs[0], new NodeArrayAStarPathFinding(NavigationManager.Instance.NavMeshGraphs[0], new EuclideanDistanceHeuristic()));
 
+            GoalBoundingTable table = Resources.Load("goalboundingtable", typeof(GoalBoundingTable)) as GoalBoundingTable;
+            if (table == null) {
+                Debug.Log("Failed to load Goal Bounding Table");
+            }
+            this.Initialize(NavigationManager.Instance.NavMeshGraphs[0], new GoalBoundingPathfinding(NavigationManager.Instance.NavMeshGraphs[0], new EuclidianHeuristic(), table));
 
             //initialization of the GOB decision making
             //let's start by creating 4 main goals
-            
+
             this.SurviveGoal = new Goal(SURVIVE_GOAL, 2.0f);
 
             this.GainXPGoal = new Goal(GAIN_XP_GOAL, 1.0f)
@@ -218,7 +226,7 @@ namespace Assets.Scripts
                 {
                     //lets smooth out the Path
                     this.startPosition = this.Character.KinematicData.position;
-					this.currentSmoothedSolution = PathSmoothing.StraighLineSmoothing(currentSolution, navMesh);
+					this.currentSmoothedSolution = PathSmoothing.StraighLineSmoothing(this.Character.KinematicData.position, this.previousTarget, currentSolution, navMesh);
                     this.currentSmoothedSolution.CalculateLocalPathsFromPathPositions(this.Character.KinematicData.position);
 					this.Character.Movement = new DynamicFollowPath(this.Character.KinematicData, this.currentSmoothedSolution)
                     {

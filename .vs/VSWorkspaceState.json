@@ -1,16 +1,15 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Checkpoint2-W",
-    "\\Checkpoint2-W\\Assets",
-    "\\Checkpoint2-W\\Assets\\Scripts",
-    "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity",
-    "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity\\Pathfinding",
-    "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\DataStructures",
-    "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\DataStructures\\GoalBounding",
-    "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\Heuristics",
-    "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\Path"
+    "\\Checkpoint3",
+    "\\Checkpoint3\\Assets",
+    "\\Checkpoint3\\Assets\\Scripts",
+    "\\Checkpoint3\\Assets\\Scripts\\DecisionMakingActions",
+    "\\Checkpoint3\\Assets\\Scripts\\GameManager",
+    "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity",
+    "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\DecisionMaking",
+    "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\DecisionMaking\\GOB"
   ],
-  "SelectedNode": "\\Checkpoint2-W\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\PathSmoothing.cs",
+  "SelectedNode": "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\DecisionMaking\\GOB\\DepthLimitedGOAPDecisionMaking.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -15,7 +15,7 @@ namespace Assets.Scripts.DecisionMakingActions
             if (target.tag.Equals("Skeleton"))
             {
                 this.hpChange = -2;
-                this.xpChange = 5;
+                this.xpChange = 3;
             }
             else if (target.tag.Equals("Orc"))
             {
@@ -25,7 +25,7 @@ namespace Assets.Scripts.DecisionMakingActions
             else if (target.tag.Equals("Dragon"))
             {
                 this.hpChange = -10;
-                this.xpChange = 15;
+                this.xpChange = 20;
             }
         }
 

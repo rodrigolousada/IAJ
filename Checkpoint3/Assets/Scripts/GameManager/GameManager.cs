@@ -99,7 +99,7 @@ namespace Assets.Scripts.GameManager
                 if(enemy.tag.Equals("Skeleton"))
                 {
                     damage = 2;
-                    this.characterData.XP += 5;
+                    this.characterData.XP += 3;
                 }
                 else if(enemy.tag.Equals("Orc"))
                 {
@@ -109,7 +109,7 @@ namespace Assets.Scripts.GameManager
                 else if(enemy.tag.Equals("Dragon"))
                 {
                     damage = 10;
-                    this.characterData.XP += 15;
+                    this.characterData.XP += 20;
                 }
 
                 int remainingDamage = damage - this.characterData.ShieldHP;

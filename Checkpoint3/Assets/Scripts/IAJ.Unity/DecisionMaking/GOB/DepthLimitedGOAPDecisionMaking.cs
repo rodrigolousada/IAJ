@@ -51,10 +51,46 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
 
 			var startTime = Time.realtimeSinceStartup;
 
-			//TODO: Implement
-			throw new NotImplementedException();
+            //TODO: Implement
+            while (processedActions < this.ActionCombinationsProcessedPerFrame)
+            {
+                this.TotalActionCombinationsProcessed += 1;
+                if (this.CurrentDepth < 0) {
+                    this.CurrentDepth = 0;
+                    this.InProgress = false;
+                    this.TotalProcessingTime += Time.realtimeSinceStartup - startTime;
+                    return this.BestAction;
+                }
 
-			this.TotalProcessingTime += Time.realtimeSinceStartup - startTime;
+                else if (this.CurrentDepth >= MAX_DEPTH) {
+                    var currentValue = this.Models[this.CurrentDepth].CalculateDiscontentment(this.Goals);
+
+                    if (currentValue < this.BestDiscontentmentValue) {
+                        this.BestDiscontentmentValue = currentValue;
+                        this.BestAction = this.BestActionSequence[0];
+                    }
+
+                    this.TotalActionCombinationsProcessed += 1;
+                    this.CurrentDepth -= 1;
+                    continue;
+                }
+
+                var nextAction = this.Models[this.CurrentDepth].GetNextAction();
+                if (nextAction != null) {
+                    this.Models[this.CurrentDepth + 1] = this.Models[CurrentDepth].GenerateChildWorldModel();
+                    nextAction.ApplyActionEffects(this.Models[this.CurrentDepth + 1]);
+                    this.Models[this.CurrentDepth + 1].CalculateNextPlayer(); //delete?
+                    this.BestActionSequence[this.CurrentDepth] = nextAction;
+                    this.CurrentDepth += 1;
+                    processedActions += 1;
+                }
+                else {
+                    CurrentDepth -= 1;
+                }
+            }
+
+
+            this.TotalProcessingTime += Time.realtimeSinceStartup - startTime;
 			this.InProgress = false;
 			return this.BestAction;
         }
