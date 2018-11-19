@@ -15,10 +15,10 @@ namespace Assets.Scripts.GameManager
         public AutonomousCharacter autonomousCharacter;
 
         public Text HPText;
+        public Text ShieldHPText;
         public Text ManaText;
         public Text TimeText;
         public Text XPText;
-        public Text ShieldHPText;
         public Text LevelText;
         public Text MoneyText;
         public GameObject GameEnd;
@@ -65,6 +65,7 @@ namespace Assets.Scripts.GameManager
             }
 
             
+
 
 
             this.HPText.text = "HP: " + this.characterData.HP;
