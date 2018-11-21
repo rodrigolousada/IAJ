@@ -29,7 +29,7 @@ namespace Assets.Scripts.DecisionMakingActions
 
             if (goal.Name == AutonomousCharacter.SURVIVE_GOAL)
             {
-                change += this.ShieldOfFaithHP - this.Character.GameManager.characterData.ShieldHP;
+                change += -(this.ShieldOfFaithHP - this.Character.GameManager.characterData.ShieldHP);
             }
 
             return change;
