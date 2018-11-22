@@ -83,7 +83,17 @@ namespace Assets.Scripts.DecisionMakingActions
             worldModel.SetGoalValue(AutonomousCharacter.SURVIVE_GOAL, surviveValue - this.hpChange);
 
             var hp = (int)worldModel.GetProperty(Properties.HP);
-            worldModel.SetProperty(Properties.HP, hp + this.hpChange);
+            var shieldhp = (int)worldModel.GetProperty(Properties.SHIELDHP);
+            var shield_value = shieldhp + this.hpChange;
+            if (shield_value < 0)
+            {
+                worldModel.SetProperty(Properties.HP, hp + shield_value);
+                worldModel.SetProperty(Properties.SHIELDHP, 0);
+            }
+            else
+            {
+                worldModel.SetProperty(Properties.HP, shield_value);
+            }
             var xp = (int)worldModel.GetProperty(Properties.XP);
             worldModel.SetProperty(Properties.XP, xp + this.xpChange);
             var mana = (int)worldModel.GetProperty(Properties.MANA);

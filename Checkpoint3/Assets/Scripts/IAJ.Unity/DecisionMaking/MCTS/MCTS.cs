@@ -29,8 +29,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         private CurrentStateWorldModel CurrentStateWorldModel { get; set; }
         private MCTSNode InitialNode { get; set; }
         private System.Random RandomGenerator { get; set; }
-        
-        
+
+        public bool RobustMCTS { get; set; } //comment
 
         public MCTS(CurrentStateWorldModel currentStateWorldModel)
         {
@@ -42,6 +42,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             this.MaxProcessingTimePerFrame = 5; //comment
             this.TotalIterations = 0; //comment
             this.RandomGenerator = new System.Random();
+            this.RobustMCTS = true; //comment
         }
 
 
@@ -76,36 +77,36 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
             //create root node node0 for state s0
             //while within computational budget do
-            //        node1 < -Selection(node0)
-            //        reward < -Playout(S(node1))
+            //        node1 <- Selection(node0)
+            //        reward <- Playout(S(node1))
             //        Backpropagation(node1, reward)
             //return A(BestInitialChild(node0))
 
-            float elapsedTime = 0f;
+            float timeInFrame = 0f;
 
-            while (elapsedTime < this.MaxProcessingTimePerFrame) {
-                var n1 = this.Selection(selectedNode);
-                reward = this.Playout(n1.State);
-                this.Backpropagate(n1, reward);
+            while (timeInFrame < this.MaxProcessingTimePerFrame) {
+                var node1 = this.Selection(selectedNode);
+                reward = this.Playout(node1.State);
+                this.Backpropagate(node1, reward);
 
-                elapsedTime += Time.realtimeSinceStartup - startTime;
+                timeInFrame += Time.realtimeSinceStartup - startTime; //ter a ceteza
                 this.CurrentIterations += 1;
                 this.TotalIterations += 1;
             }
 
-            this.TotalProcessingTime += elapsedTime;
+            this.TotalProcessingTime += timeInFrame;
 
-            if (this.CurrentIterations >= this.MaxIterations) {
-                var n0 = this.BestChild(selectedNode);
-                if (n0 != null) {
-                    if (n0.Q == 0)
+            if (this.CurrentIterations >= this.MaxIterations) { //ter a certeza
+                var node0 = this.BestChild(selectedNode);
+                if (node0 != null) {
+                    if (node0.Q == 0) // ter a certeza
                         return null;
 
-                    this.BestFirstChild = n0;
+                    this.BestFirstChild = node0;
 
-                    if (!this.IsInfinite)
+                    if (!this.IsInfinite) //ter a certeza
                         this.InProgress = false;
-                    return n0.Action;
+                    return node0.Action;
                 }
             }
             return null;
@@ -140,12 +141,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 else {
                     if (currentNode.ChildNodes.Count > 0) {
                         bestChild = currentNode;
-                        currentNode = BestUCTChild(currentNode);
+                        currentNode = this.BestUCTChild(currentNode);
                         this.CurrentDepth++;
                         if (this.CurrentDepth > this.MaxSelectionDepthReached)
                             this.MaxSelectionDepthReached = this.CurrentDepth;
                     }
-                    //No children to expand because all were cut
                     else {
                         return currentNode;
                     }
@@ -192,10 +192,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             //; ; because the parent will decide the best child
 
             while (node!=null) {
-                //if (node.PlayerID == reward.PlayerID) {
+                if (node.PlayerID == reward.PlayerID) {
                     node.N++;
                     node.Q += reward.Value;
-                //}
+                }
                 node = node.Parent;
             }
         }
@@ -212,13 +212,13 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
             WorldModel state = parent.State.GenerateChildWorldModel();
             action.ApplyActionEffects(state);
-            //state.CalculateNextPlayer();
+            state.CalculateNextPlayer();
 
             MCTSNode child = new MCTSNode(state)
             {
                 Action = action,
                 Parent = parent,
-                //PlayerID = state.GetNextPlayer()
+                PlayerID = state.GetNextPlayer()
             };
             parent.ChildNodes.Add(child);
 
@@ -229,7 +229,22 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         private MCTSNode BestUCTChild(MCTSNode node)
         {
             //TODO: implement
-            throw new NotImplementedException();
+            float parentLog = Mathf.Log(node.N);
+            float currentUCT;
+            float bestUCT = -1;
+
+            MCTSNode bestChild = null;
+            foreach(var childNode in node.ChildNodes) {
+                var exploitation = (childNode.Q / childNode.N);
+                var exploration = C * Mathf.Sqrt(parentLog / childNode.N);
+                currentUCT = exploitation + exploration;
+
+                if(currentUCT > bestUCT) {
+                    bestUCT = currentUCT;
+                    bestChild = childNode;
+                }
+            }
+            return bestChild;
         }
 
         //this method is very similar to the bestUCTChild, but it is used to return the final action of the MCTS search, and so we do not care about
@@ -237,7 +252,26 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         private MCTSNode BestChild(MCTSNode node)
         {
             //TODO: implement
-            throw new NotImplementedException();
+            List<MCTSNode> childNodes = node.ChildNodes;
+            float currentUCT;
+            float bestUCT = -1;
+
+            MCTSNode bestChild = null;
+
+            foreach(var childNode in childNodes) {
+                //if (this.ApplyCuts && this.ToCut(node.State, childNode.Action))
+                //    continue;
+                if (this.RobustMCTS)
+                    currentUCT = childNode.N;
+                else
+                    currentUCT = (childNode.Q / childNode.N);
+
+                if(currentUCT > bestUCT) {
+                    bestUCT = currentUCT;
+                    bestChild = childNode;
+                }
+            }
+            return bestChild;
         }
     }
 }
