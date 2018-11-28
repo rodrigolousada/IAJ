@@ -8,9 +8,8 @@
     "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity",
     "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\DecisionMaking",
     "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\DecisionMaking\\GOB",
-    "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\DecisionMaking\\MCTS",
-    "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\Pathfinding"
+    "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\DecisionMaking\\MCTS"
   ],
-  "SelectedNode": "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\DecisionMaking\\MCTS\\Reward.cs.meta",
+  "SelectedNode": "\\Checkpoint3\\Assets\\Scripts\\DecisionMakingActions\\ShieldOfFaith.cs",
   "PreviewInSolutionExplorer": false
 }

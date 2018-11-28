@@ -41,7 +41,7 @@ namespace Assets.Scripts.DecisionMakingActions
             if (!base.CanExecute())
                 return false;
 
-            return this.Character.GameManager.characterData.Mana >= this.ManaCost;
+            return (this.Character.GameManager.characterData.Mana >= this.ManaCost)  && (this.Character.GameManager.characterData.ShieldHP < this.ShieldOfFaithHP);
         }
 
 		public override bool CanExecute(WorldModel worldModel)
