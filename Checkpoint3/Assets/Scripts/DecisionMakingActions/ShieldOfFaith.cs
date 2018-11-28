@@ -51,7 +51,8 @@ namespace Assets.Scripts.DecisionMakingActions
                 return false;
 
             var mana = (int)worldModel.GetProperty(Properties.MANA);
-            return mana >= this.ManaCost;
+            var shield = (int)worldModel.GetProperty(Properties.SHIELDHP);
+            return (mana >= this.ManaCost) && (shield < this.ShieldOfFaithHP);
         }
 
 		public override void Execute()

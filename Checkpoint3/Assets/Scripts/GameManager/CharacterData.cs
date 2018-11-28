@@ -20,7 +20,7 @@ namespace Assets.Scripts.GameManager
             this.HP = 10;
             this.ShieldHP = 0;
             this.MaxHP = 10;
-            this.Mana = 0;
+            this.Mana = 10;
             this.Money = 0;
             this.Time = 0;
             this.XP = 0;

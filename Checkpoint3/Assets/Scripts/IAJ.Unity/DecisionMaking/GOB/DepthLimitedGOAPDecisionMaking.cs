@@ -7,7 +7,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
 {
     public class DepthLimitedGOAPDecisionMaking
     {
-        public const int MAX_DEPTH = 2;
+        public const int MAX_DEPTH =2;
         public int ActionCombinationsProcessedPerFrame { get; set; }
         public float TotalProcessingTime { get; set; }
         public int TotalActionCombinationsProcessed { get; set; }
@@ -91,8 +91,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
 
 
             this.TotalProcessingTime += Time.realtimeSinceStartup - startTime;
-			this.InProgress = false;
-			return this.BestAction;
+			return null;
         }
     }
 }
