@@ -72,8 +72,11 @@
      <Compile Include="Assets\Character\Standard Assets\Image Effects (Pro Only)\VortexEffect.cs" />
      <Compile Include="Assets\Scripts\AutonomousCharacter.cs" />
      <Compile Include="Assets\Scripts\DecisionMakingActions\DivineSmite.cs" />
+     <Compile Include="Assets\Scripts\DecisionMakingActions\DivineWrath.cs" />
      <Compile Include="Assets\Scripts\DecisionMakingActions\GetHealthPotion.cs" />
      <Compile Include="Assets\Scripts\DecisionMakingActions\GetManaPotion.cs" />
+     <Compile Include="Assets\Scripts\DecisionMakingActions\LayOnHands.cs" />
+     <Compile Include="Assets\Scripts\DecisionMakingActions\LevelUp.cs" />
      <Compile Include="Assets\Scripts\DecisionMakingActions\PickUpChest.cs" />
      <Compile Include="Assets\Scripts\DecisionMakingActions\ShieldOfFaith.cs" />
      <Compile Include="Assets\Scripts\DecisionMakingActions\SwordAttack.cs" />
@@ -88,7 +91,9 @@
      <Compile Include="Assets\Scripts\IAJ.Unity\DecisionMaking\GOB\Goal.cs" />
      <Compile Include="Assets\Scripts\IAJ.Unity\DecisionMaking\GOB\WorldModel.cs" />
      <Compile Include="Assets\Scripts\IAJ.Unity\DecisionMaking\MCTS\MCTS.cs" />
+     <Compile Include="Assets\Scripts\IAJ.Unity\DecisionMaking\MCTS\MCTSBiasedPlayout.cs" />
      <Compile Include="Assets\Scripts\IAJ.Unity\DecisionMaking\MCTS\MCTSNode.cs" />
+     <Compile Include="Assets\Scripts\IAJ.Unity\DecisionMaking\MCTS\MCTSRAVE.cs" />
      <Compile Include="Assets\Scripts\IAJ.Unity\DecisionMaking\MCTS\Reward.cs" />
      <Compile Include="Assets\Scripts\IAJ.Unity\Movement\DynamicMovement\DynamicArrive.cs" />
      <Compile Include="Assets\Scripts\IAJ.Unity\Movement\DynamicMovement\DynamicCharacter.cs" />

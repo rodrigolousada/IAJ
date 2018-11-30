@@ -58,5 +58,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         public virtual void ApplyActionEffects(WorldModel worldModel)
         {
         }
+
+        public virtual float GetHValue(WorldModel worldModel)
+        {
+            //you would be dumb not to level up if possible
+            return 0.0f;
+        }
     }
 }

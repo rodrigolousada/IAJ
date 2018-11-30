@@ -22,13 +22,13 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         public List<GOB.Action> BestActionSequence { get; private set; }
 
 
-        private int CurrentIterations { get; set; }
-        private int CurrentIterationsInFrame { get; set; }
-        private int CurrentDepth { get; set; }
+        protected int CurrentIterations { get; set; }
+        protected int CurrentIterationsInFrame { get; set; }
+        protected int CurrentDepth { get; set; }
 
-        private CurrentStateWorldModel CurrentStateWorldModel { get; set; }
-        private MCTSNode InitialNode { get; set; }
-        private System.Random RandomGenerator { get; set; }
+        protected CurrentStateWorldModel CurrentStateWorldModel { get; set; }
+        protected MCTSNode InitialNode { get; set; }
+        protected System.Random RandomGenerator { get; set; }
 
         public bool RobustMCTS { get; set; } //comment
 
@@ -84,27 +84,27 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
             float timeInFrame = 0f;
 
-            while (timeInFrame < this.MaxProcessingTimePerFrame) {
+            while ((timeInFrame < this.MaxProcessingTimePerFrame) && (this.CurrentIterations < this.MaxIterations)) {
                 var node1 = this.Selection(selectedNode);
                 reward = this.Playout(node1.State);
                 this.Backpropagate(node1, reward);
 
-                timeInFrame += Time.realtimeSinceStartup - startTime; //ter a ceteza
+                timeInFrame = Time.realtimeSinceStartup - startTime;
                 this.CurrentIterations += 1;
                 this.TotalIterations += 1;
             }
-
+            
             this.TotalProcessingTime += timeInFrame;
 
-            if (this.CurrentIterations >= this.MaxIterations) { //ter a certeza
+            if (this.CurrentIterations >= this.MaxIterations) {
                 var node0 = this.BestChild(selectedNode);
                 if (node0 != null) {
-                    if (node0.Q == 0) // ter a certeza
+                    if (node0.Q == 0)
                         return null;
 
                     this.BestFirstChild = node0;
 
-                    if (!this.IsInfinite) //ter a certeza
+                    if (!this.IsInfinite)
                         this.InProgress = false;
                     return node0.Action;
                 }
@@ -113,7 +113,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
         }
 
-        private MCTSNode Selection(MCTSNode initialNode)
+        protected MCTSNode Selection(MCTSNode initialNode)
         {
             GOB.Action nextAction;
             MCTSNode currentNode = initialNode;
@@ -154,7 +154,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             return currentNode;
         }
 
-        private Reward Playout(WorldModel initialPlayoutState)
+        protected virtual Reward Playout(WorldModel initialPlayoutState)
         {
             //TODO: implement
 
@@ -180,7 +180,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             return reward;
         }
 
-        private void Backpropagate(MCTSNode node, Reward reward)
+        protected virtual void Backpropagate(MCTSNode node, Reward reward)
         {
             //TODO: implement
 
@@ -200,7 +200,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             }
         }
 
-        private MCTSNode Expand(MCTSNode parent, GOB.Action action)
+        protected MCTSNode Expand(MCTSNode parent, GOB.Action action)
         {
             //TODO: implement
 
@@ -214,19 +214,19 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             action.ApplyActionEffects(state);
             state.CalculateNextPlayer();
 
-            MCTSNode child = new MCTSNode(state)
+            MCTSNode child_node = new MCTSNode(state)
             {
                 Action = action,
                 Parent = parent,
                 PlayerID = state.GetNextPlayer()
             };
-            parent.ChildNodes.Add(child);
+            parent.ChildNodes.Add(child_node);
 
-            return child;
+            return child_node;
         }
 
         //gets the best child of a node, using the UCT formula
-        private MCTSNode BestUCTChild(MCTSNode node)
+        protected virtual MCTSNode BestUCTChild(MCTSNode node)
         {
             //TODO: implement
             float parentLog = Mathf.Log(node.N);
@@ -249,7 +249,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
         //this method is very similar to the bestUCTChild, but it is used to return the final action of the MCTS search, and so we do not care about
         //the exploration factor
-        private MCTSNode BestChild(MCTSNode node)
+        protected MCTSNode BestChild(MCTSNode node)
         {
             //TODO: implement
             List<MCTSNode> childNodes = node.ChildNodes;
@@ -273,5 +273,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             }
             return bestChild;
         }
+
+        //protected GOB.Action BestFinalAction(MCTSNode node)
+        //{
+        //    //TODO: implement
+        //    throw new NotImplementedException();
+        //}
     }
 }

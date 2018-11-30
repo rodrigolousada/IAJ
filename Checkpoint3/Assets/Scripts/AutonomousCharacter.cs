@@ -13,6 +13,7 @@ using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures.GoalBounding;
 using Assets.Scripts.IAJ.Unity.Pathfinding.GoalBounding;
 using Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics;
 using Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS;
+using System.Linq;
 
 namespace Assets.Scripts
 {
@@ -24,7 +25,7 @@ namespace Assets.Scripts
         public const string BE_QUICK_GOAL = "BeQuick";
         public const string GET_RICH_GOAL = "GetRich";
 
-        public const float DECISION_MAKING_INTERVAL = 10.0f;
+        public const float DECISION_MAKING_INTERVAL = 100.0f;
         //public fields to be set in Unity Editor
         public GameManager.GameManager GameManager;
         public Text SurviveGoalText;
@@ -73,8 +74,10 @@ namespace Assets.Scripts
             this.navMesh = navMeshGraph;
             this.AStarPathFinding = pathfindingAlgorithm;
             this.AStarPathFinding.NodesPerFrame = 100;
+            this.MCTSActive = true;
 
-			this.characterAnimator = this.GetComponentInChildren<Animator> ();
+
+            this.characterAnimator = this.GetComponentInChildren<Animator> ();
         }
 
         public void Start()
@@ -126,7 +129,12 @@ namespace Assets.Scripts
             this.Actions = new List<Action>();
 
             this.Actions.Add(new ShieldOfFaith(this));
-
+            this.Actions.Add(new LevelUp(this));
+            this.Actions.Add(new LayOnHands(this));
+            var enemies = GameObject.FindGameObjectsWithTag("Skeleton")
+                .Concat(GameObject.FindGameObjectsWithTag("Orc"))
+                .Concat(GameObject.FindGameObjectsWithTag("Dragon")).ToArray();
+            this.Actions.Add(new DivineWrath(this, enemies));
 
             foreach (var chest in GameObject.FindGameObjectsWithTag("Chest"))
             {
@@ -161,14 +169,14 @@ namespace Assets.Scripts
 
             var worldModel = new CurrentStateWorldModel(this.GameManager, this.Actions, this.Goals);
             this.GOAPDecisionMaking = new DepthLimitedGOAPDecisionMaking(worldModel,this.Actions,this.Goals);
-            if (this.MCTSBiased)
-            {
+            if (this.MCTSBiased) {
                 //this.MCTSDecisionMaking = new MCTSBiasedPlayout(worldModel);
             }
-            else
-            {
+            else {
                 this.MCTSDecisionMaking = new MCTS(worldModel);
             }
+            this.MCTSDecisionMaking.MaxIterations = 5000;
+            this.MCTSDecisionMaking.MaxIterationsProcessedPerFrame = 25;
         }
 
         void Update()
@@ -214,23 +222,8 @@ namespace Assets.Scripts
 
                 //initialize Decision Making Proccess
                 this.CurrentAction = null;
-                if (this.MCTSActive)
-                {
-                    ////The Current Action is the one being processed during the previous interval
-                    //if (this.MCTSLookahead && actionCount > 0 && this.MCTSDecisionMaking.BestFirstChild != null) {
-                    //    this.CurrentAction = this.MCTSDecisionMaking.BestFirstChild.Action;
-                    //    actionCount += 1;
-                    //    //Calculate the future world state so that we can plan the next action during the execution of this action
-                    //    this.MCTSDecisionMaking.SetState(this.CalculateFutureModel(this.CurrentAction));
-                    //    //Debug.Log("Restart MCTS");
-                        this.MCTSDecisionMaking.InitializeMCTSearch();
-                    //}
-                    //else if (this.MCTSLookahead) {
-                    //    this.MCTSDecisionMaking.InitializeMCTSearch();
-                    //}
-                    //else if (!this.MCTSLookahead) {
-                    //    this.MCTSDecisionMaking.InitializeMCTSearch();
-                    //}
+                if (this.MCTSActive) {
+                    this.MCTSDecisionMaking.InitializeMCTSearch();
                 }
                 else {
                     this.GOAPDecisionMaking.InitializeDecisionMakingProcess();
@@ -251,14 +244,6 @@ namespace Assets.Scripts
                 {
                     this.CurrentAction.Execute();
                 }
-                //else if (this.MCTSLookahead)
-                //{
-                //    //Debug.Log("--------------------------------- Cannote execute action");
-                //    this.GameManager.WorldChanged = true;
-                //    this.CurrentAction = null;
-                //    var worldModel = new CurrentStateWorldModel(this.GameManager, this.Actions, this.Goals);
-                //    this.MCTSDecisionMaking.SetState(worldModel);
-                //}
             }
 
             //call the pathfinding method if the user specified a new goal
@@ -332,42 +317,46 @@ namespace Assets.Scripts
                 var action = this.MCTSDecisionMaking.Run();
                 if (action != null)
                 {
-                    //if (!this.MCTSLookahead)
-                    //{
-                        this.CurrentAction = action;
-                    //}
-                    //else if(this.MCTSLookahead && actionCount == 0)
-                    //else if (this.MCTSLookahead && this.CurrentAction == null)
-                    //{
-                    //    actionCount += 1;
-                    //    this.CurrentAction = action;
-                    //    this.MCTSDecisionMaking.IsInfinite = true;
-                    //    //Calculate the future world state so that we can plan the next action during the execution of this action
-                    //    this.MCTSDecisionMaking.SetState(this.CalculateFutureModel(this.CurrentAction));
-                    //    this.MCTSDecisionMaking.InitializeMCTSearch();
-                    //    //Debug.Log("Restart MCTS");
-                    //}
+                    this.CurrentAction = action;
                 }
             }
 
             this.TotalProcessingTimeText.text = "Process. Time: " + this.MCTSDecisionMaking.TotalProcessingTime.ToString("F");
-            this.BestDiscontentmentText.text = "Max Depth Reached: " + this.MCTSDecisionMaking.MaxSelectionDepthReached;
+
+            this.ProcessedActionsText.text = "Max Depth: " + this.MCTSDecisionMaking.MaxPlayoutDepthReached.ToString();
+
             this.ProcessedActionsText.text = "Act. comb. processed: " + this.MCTSDecisionMaking.TotalIterations;
 
-            this.BestActionText.text = "Current Action: ";
-
-            if (this.CurrentAction != null)
-                this.BestActionText.text += this.CurrentAction.Name;
+            if (this.MCTSDecisionMaking.BestFirstChild != null)
+            {
+                var q = this.MCTSDecisionMaking.BestFirstChild.Q / this.MCTSDecisionMaking.BestFirstChild.N;
+                this.BestDiscontentmentText.text = "Best Exp. Q value: " + q.ToString("F");
+                var actionText = "";
+                foreach (var action in this.MCTSDecisionMaking.BestActionSequence)
+                {
+                    actionText += "\n" + action.Name;
+                }
+                this.BestActionText.text = "Best Action Sequence: " + actionText;
+            }
             else
-                this.BestActionText.text += "Null";
+            {
+                this.BestActionText.text = "Best Action Sequence:\nNone";
+            }
 
-            if (this.MCTSDecisionMaking.BestFirstChild != null) {
-                var actionText = this.MCTSDecisionMaking.BestFirstChild.Action.Name;
-                this.BestActionText.text += "\nBest Next Action: " + actionText;
-            }
-            else {
-                this.BestActionText.text += "\nBest Next Action:\nNone";
-            }
+            //this.BestActionText.text = "Current Action: ";
+
+            //if (this.CurrentAction != null)
+            //    this.BestActionText.text += this.CurrentAction.Name;
+            //else
+            //    this.BestActionText.text += "Null";
+
+            //if (this.MCTSDecisionMaking.BestFirstChild != null) {
+            //    var actionText = this.MCTSDecisionMaking.BestFirstChild.Action.Name;
+            //    this.BestActionText.text += "\nBest Next Action: " + actionText;
+            //}
+            //else {
+            //    this.BestActionText.text += "\nBest Next Action:\nNone";
+            //}
         }
 
         public void StartPathfinding(Vector3 targetPosition)
