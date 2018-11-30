@@ -168,7 +168,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 var executable_actions = s.GetExecutableActions();
                 var action = executable_actions[UnityEngine.Random.Range(0, executable_actions.Length - 1)];
                 action.ApplyActionEffects(s);
-                //s.CalculateNextPlayer();
+                s.CalculateNextPlayer();
                 s = s.GenerateChildWorldModel();
             }
 

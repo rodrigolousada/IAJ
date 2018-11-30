@@ -79,7 +79,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
                 if (nextAction != null) {
                     this.Models[this.CurrentDepth + 1] = this.Models[CurrentDepth].GenerateChildWorldModel();
                     nextAction.ApplyActionEffects(this.Models[this.CurrentDepth + 1]);
-                    this.Models[this.CurrentDepth + 1].CalculateNextPlayer(); //delete?
+                    this.Models[this.CurrentDepth + 1].CalculateNextPlayer();
                     this.BestActionSequence[this.CurrentDepth] = nextAction;
                     this.CurrentDepth += 1;
                     processedActions += 1;

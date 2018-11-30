@@ -208,7 +208,7 @@ namespace Assets.Scripts.GameManager
 
         public void DivineWrath()
         {
-            if(this.characterData.Level >= 3 && this.characterData.Mana >= 10)
+            if(this.characterData.Level >= 3 && this.characterData.Mana >= 10 && this.enemies!=null)
             {
                 //kill all enemies in the map
                 foreach (var enemy in this.enemies)
@@ -231,6 +231,7 @@ namespace Assets.Scripts.GameManager
                 }
 
                 enemies.Clear();
+                this.characterData.Mana -= 10;
                 this.WorldChanged = true;
             }
         }

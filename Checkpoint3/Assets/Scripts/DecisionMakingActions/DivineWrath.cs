@@ -24,9 +24,9 @@ namespace Assets.Scripts.DecisionMakingActions
             this.xpChange = 0;
             this.manaChange = -10;
             this.ManaCost = 10;
-            this.LevelRequired = 1;
+            this.LevelRequired = 3;
 
-            foreach (var target in targets) {
+            foreach (var target in this.Targets) {
                 if (target.tag.Equals("Skeleton"))
                 {
                     this.xpChange += 3;
@@ -62,7 +62,8 @@ namespace Assets.Scripts.DecisionMakingActions
                 return false;
 
             return (this.Character.GameManager.characterData.Mana >= this.ManaCost)
-                && (this.Character.GameManager.characterData.Level >= this.LevelRequired);
+                && (this.Character.GameManager.characterData.Level >= this.LevelRequired)
+                && (this.Targets != null);
         }
 
         public override bool CanExecute(WorldModel worldModel)
@@ -73,7 +74,7 @@ namespace Assets.Scripts.DecisionMakingActions
 
             var mana = (int)worldModel.GetProperty(Properties.MANA);
             var level = (int)worldModel.GetProperty(Properties.LEVEL);
-            return (mana >= this.ManaCost) && (level >= this.LevelRequired);
+            return (mana >= this.ManaCost) && (level >= this.LevelRequired) && (this.Targets != null);
         }
 
         public override void Execute()
@@ -101,7 +102,8 @@ namespace Assets.Scripts.DecisionMakingActions
 
             //disables the target object so that it can't be reused again
             foreach (var target in this.Targets) {
-                worldModel.SetProperty(target.name, false);
+                if(target!=null)
+                    worldModel.SetProperty(target.name, false);
             }
         }
 
