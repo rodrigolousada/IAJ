@@ -74,7 +74,7 @@ namespace Assets.Scripts
             this.AStarPathFinding = pathfindingAlgorithm;
             this.AStarPathFinding.NodesPerFrame = 100;
             this.MCTSActive = true;
-            this.MCTSBiased = false;
+            this.MCTSBiased = true;
 
 
             this.characterAnimator = this.GetComponentInChildren<Animator> ();
@@ -343,20 +343,23 @@ namespace Assets.Scripts
                 this.BestActionText.text = "Best Action Sequence:\nNone";
             }
 
-            //this.BestActionText.text = "Current Action: ";
+            //coment after
+            this.BestActionText.text = "Current Action: ";
 
-            //if (this.CurrentAction != null)
-            //    this.BestActionText.text += this.CurrentAction.Name;
-            //else
-            //    this.BestActionText.text += "Null";
+            if (this.CurrentAction != null)
+                this.BestActionText.text += this.CurrentAction.Name;
+            else
+                this.BestActionText.text += "Null";
 
-            //if (this.MCTSDecisionMaking.BestFirstChild != null) {
-            //    var actionText = this.MCTSDecisionMaking.BestFirstChild.Action.Name;
-            //    this.BestActionText.text += "\nBest Next Action: " + actionText;
-            //}
-            //else {
-            //    this.BestActionText.text += "\nBest Next Action:\nNone";
-            //}
+            if (this.MCTSDecisionMaking.BestFirstChild != null)
+            {
+                var actionText = this.MCTSDecisionMaking.BestFirstChild.Action.Name;
+                this.BestActionText.text += "\nBest Next Action: " + actionText;
+            }
+            else
+            {
+                this.BestActionText.text += "\nBest Next Action:\nNone";
+            }
         }
 
         public void StartPathfinding(Vector3 targetPosition)

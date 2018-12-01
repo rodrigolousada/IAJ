@@ -60,37 +60,36 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         protected float CalcHeuristic(WorldModel parentState, GOB.Action action) //MCTSNode
         {
             //TODO: implement
-
-            //choose a from untried actions from Actions(S(node))
-            //add a new child node’ to node
-            //    with S(node’) = Result(S(node), a)
-            //    with A(node’) = a
-            //return node’
-
             WalkToTargetAndExecuteAction walk_action = action as WalkToTargetAndExecuteAction;
-            float h = 1;
+            float h = 10;
+
+            if (action.Name.StartsWith("LevelUp") && action.CanExecute(parentState)) {
+                h += 10000;
+            }
+            if (action.Name.StartsWith("DivineWrath") && action.CanExecute(parentState)) {
+                h += 10000;
+            }
 
             float distance;
-            /*if (walk_action != null) {
-                distance = action.GetDuration(state);
-            }*/
             if (walk_action != null) {
                 distance = action.GetDuration(parentState);
-                h += Mathf.Abs(((8 - distance) / 8) * 12);
+                h += Mathf.Abs(100/(distance+1));
 
-                //if (action.Name.Contains("Chest")) {
+                //if (action.Name.Contains("Chest") && action.CanExecute()) {
                 //    h += 20;
                 //}
-                if (action.Name.StartsWith("GetHealthPotion") && (int)parentState.GetProperty(Properties.HP) < (int)parentState.GetProperty(Properties.MAXHP)*0.5) {
+                if (action.Name.StartsWith("GetHealthPotion") && (int)parentState.GetProperty(Properties.SHIELDHP)==0 && (int)parentState.GetProperty(Properties.HP) < (int)parentState.GetProperty(Properties.MAXHP)*0.3) {
                     h += 10;
                 }
-                else if (action.Name.StartsWith("GetHealthPotion") && (int)parentState.GetProperty(Properties.HP) >= (int)parentState.GetProperty(Properties.MAXHP) * 0.5) {
-                    h -= 10;
+                else if (action.Name.StartsWith("GetHealthPotion") && (int)parentState.GetProperty(Properties.HP)+(int)parentState.GetProperty(Properties.SHIELDHP) >= (int)parentState.GetProperty(Properties.MAXHP) * 0.4) {
+                    h -= 8;
                 }
-                else if (action.Name.Contains("Skeleton") && (int)parentState.GetProperty(Properties.HP) <= 5) {
+
+                if (action.Name.Contains("Skeleton") && (int)parentState.GetProperty(Properties.HP) <= 5) {
                     h = 0;
                 }
-                else if (action.Name.Contains("Orc") && (int)parentState.GetProperty(Properties.HP) <= 10) {
+                else { h += 5; }
+                if (action.Name.Contains("Orc") && (int)parentState.GetProperty(Properties.HP) <= 10) {
                     h = 0;
                 }
                 else if (action.Name.Contains("Dragon") && (int)parentState.GetProperty(Properties.HP) <= 20) {
@@ -98,13 +97,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 }
             }
             else {
-                h += 15;
-                if (action.Name.StartsWith("LevelUp")) {
-                    h += 1000;
-                }
-                if (action.Name.StartsWith("DivineWrath")) {
-                    h += 800;
-                }
+                h += 10;
+            }
+
+            if(!action.CanExecute()){
+                h = 0;
             }
             return h;
         }
