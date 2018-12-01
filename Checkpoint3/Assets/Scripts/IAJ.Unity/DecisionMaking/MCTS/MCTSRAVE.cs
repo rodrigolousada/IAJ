@@ -34,12 +34,30 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         protected override Reward Playout(WorldModel initialPlayoutState)
         {
             //TODO: implement
+            //actionHistory < - []
+            //while s is nonterminal do
+            //        chose a from Actions(s)uniformly at random
+            //        actionHistory <- (Player(s), a)
+            //        s <- Result(s, a)
+            //return reward,actionHistory for state s
             throw new NotImplementedException();
         }
 
         protected override void Backpropagate(MCTSNode node, Reward reward)
         {
             //TODO: implement
+            //while node is not null do
+            //    N(node) <- N(node) + 1
+            //    Q(node) <- Q(node) + r(node, Player(Parent(node)))
+            //    actionHistory <- (Player(Parent(node), A(node))
+            //    node <- Parent(node)
+
+            //    if node is not null do
+            //        p <- Player(node)
+            //        foreach (childNode in Children(node))
+            //            if ((p, A(childNode)) in actionHistory) do
+            //                Nrave(childNode) <- Nrave(childNode) + 1
+            //                Qrave(childNode) <- Qrave(childNode) + r(c, p)
             throw new NotImplementedException();
         }
     }

@@ -37,7 +37,6 @@ namespace Assets.Scripts
         public Text ProcessedActionsText;
         public Text BestActionText;
         public bool MCTSActive;
-        public bool MCTSLookahead;
         public bool MCTSBiased;
 
         public Goal BeQuickGoal { get; private set; }
@@ -75,6 +74,7 @@ namespace Assets.Scripts
             this.AStarPathFinding = pathfindingAlgorithm;
             this.AStarPathFinding.NodesPerFrame = 100;
             this.MCTSActive = true;
+            this.MCTSBiased = false;
 
 
             this.characterAnimator = this.GetComponentInChildren<Animator> ();
@@ -170,7 +170,7 @@ namespace Assets.Scripts
             var worldModel = new CurrentStateWorldModel(this.GameManager, this.Actions, this.Goals);
             this.GOAPDecisionMaking = new DepthLimitedGOAPDecisionMaking(worldModel,this.Actions,this.Goals);
             if (this.MCTSBiased) {
-                //this.MCTSDecisionMaking = new MCTSBiasedPlayout(worldModel);
+                this.MCTSDecisionMaking = new MCTSBiasedPlayout(worldModel);
             }
             else {
                 this.MCTSDecisionMaking = new MCTS(worldModel);

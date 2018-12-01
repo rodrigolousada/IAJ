@@ -4,15 +4,12 @@
     "\\Checkpoint3",
     "\\Checkpoint3\\Assets",
     "\\Checkpoint3\\Assets\\Scripts",
+    "\\Checkpoint3\\Assets\\Scripts\\DecisionMakingActions",
+    "\\Checkpoint3\\Assets\\Scripts\\GameManager",
     "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity",
     "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\DecisionMaking",
-    "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\DecisionMaking\\GOB",
-    "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\DecisionMaking\\MCTS",
-    "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\Pathfinding",
-    "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\DataStructures",
-    "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\Pathfinding\\DataStructures\\GoalBounding",
-    "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\Utils"
+    "\\Checkpoint3\\Assets\\Scripts\\IAJ.Unity\\DecisionMaking\\MCTS"
   ],
-  "SelectedNode": "\\Checkpoint3\\Assets\\Scripts\\DecisionMakingActions\\DivineWrath.cs",
+  "SelectedNode": "\\Checkpoint3\\Assets\\Scripts\\AutonomousCharacter.cs",
   "PreviewInSolutionExplorer": false
 }
