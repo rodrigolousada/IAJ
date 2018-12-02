@@ -220,6 +220,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
                 GameManager.Properties.XP,
                 "Skeleton1",
                 "Skeleton2",
+                "Skeleton3",
+                "Skeleton4",
+                "Skeleton5",
+                "Skeleton6",
+                "Skeleton7",
                 "Orc1",
                 "Orc2",
                 "Dragon",
@@ -287,18 +292,23 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
                 case GameManager.Properties.XP: return 8;
                 case "Skeleton1": return 9;
                 case "Skeleton2": return 10;
-                case "Orc1": return 11;
-                case "Orc2": return 12;
-                case "Dragon": return 13;
-                case "Chest1": return 14;
-                case "Chest2": return 15;
-                case "Chest3": return 16;
-                case "Chest4": return 17;
-                case "Chest5": return 18;
-                case "ManaPotion1": return 19;
-                case "ManaPotion2": return 20;
-                case "HealthPotion1": return 21;
-                case "HealthPotion2": return 22;
+                case "Skeleton3": return 11;
+                case "Skeleton4": return 12;
+                case "Skeleton5": return 13;
+                case "Skeleton6": return 14;
+                case "Skeleton7": return 15;
+                case "Orc1": return 16;
+                case "Orc2": return 17;
+                case "Dragon": return 18;
+                case "Chest1": return 19;
+                case "Chest2": return 20;
+                case "Chest3": return 21;
+                case "Chest4": return 22;
+                case "Chest5": return 23;
+                case "ManaPotion1": return 24;
+                case "ManaPotion2": return 25;
+                case "HealthPotion1": return 26;
+                case "HealthPotion2": return 27;
                 default: return -1;
             }
         }
