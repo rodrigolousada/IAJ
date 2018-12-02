@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.IAJ.Unity.DecisionMaking.GOB;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.Scripts.GameManager
 {
@@ -20,10 +21,10 @@ namespace Assets.Scripts.GameManager
             }
         }
 
-        public void Initialize()
-        {
-            this.ActionEnumerator.Reset();
-        }
+        //public void Initialize()
+        //{
+        //    this.ActionEnumerator.Reset();
+        //}
 
         public override object GetProperty(string propertyName)
         {
@@ -46,7 +47,16 @@ namespace Assets.Scripts.GameManager
             if (propertyName.Equals(Properties.POSITION))
                 return this.GameManager.characterData.CharacterGameObject.transform.position;
 
-            return true;
+            if (this.GameManager.enemies.Select(i => i.name).ToList().Contains(propertyName))
+                return true;
+
+            if (this.GameManager.chests.Select(i => i.name).ToList().Contains(propertyName))
+                return true;
+
+            if (propertyName.Contains("ManaPotion")) return true;
+            if (propertyName.Contains("HealthPotion")) return true;
+
+            return false;
         }
 
         public override float GetGoalValue(string goalName)
