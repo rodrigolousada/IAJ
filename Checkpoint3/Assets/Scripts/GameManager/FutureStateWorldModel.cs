@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.GameManager
 {
-    public class FutureStateWorldModel : ArrayWorldModel
+    public class FutureStateWorldModel : DictionaryWorldModel
     {
         protected GameManager GameManager { get; set; }
         protected int NextPlayer { get; set; }

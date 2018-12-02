@@ -9,6 +9,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 {
     public class MCTSBiasedPlayout : MCTS
     {
+        public const int MAX_DEPTH = 3;
+        public bool depthLimited = true;
+
         public MCTSBiasedPlayout(CurrentStateWorldModel currentStateWorldModel) : base(currentStateWorldModel)
         {
         }
@@ -33,6 +36,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             WorldModel state = initialPlayoutState.GenerateChildWorldModel();
             var actions = state.GetExecutableActions();
             Reward reward = new Reward();
+            var CurrentDepth = 0;
 
             if (actions.Length == 0) {
                 reward.Value = 0;
@@ -40,7 +44,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 return reward;
             }
 
-            while (!state.IsTerminal()) {
+            while (!state.IsTerminal() && (!depthLimited||CurrentDepth<MAX_DEPTH)) {
                 List<double> heuristicValues = new List<double>();
                 double heuristic_total = 0;
 
@@ -59,6 +63,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                         break;
                     }
                 }
+                CurrentDepth += 1;
             }
             reward.Value = state.GetScore();
             reward.PlayerID = state.GetNextPlayer();
@@ -90,14 +95,16 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     h += 10;
                 }
 
-                if (action.Name.Contains("Skeleton") && (int)parentState.GetProperty(Properties.HP) <= 5) {
+                if (action.Name.Contains("Skeleton") && (int)parentState.GetProperty(Properties.HP) <= 6) {
                     h = 0;
                 }
-                else { h += 200; }
-                if (action.Name.Contains("Orc") && (int)parentState.GetProperty(Properties.HP) <= 10) {
+                else if(action.Name.Contains("Skeleton")) {
+                    h += 200;
+                }
+                if (action.Name.Contains("Orc") && (int)parentState.GetProperty(Properties.HP) <= 20) {
                     h = 0;
                 }
-                else if (action.Name.Contains("Dragon") && (int)parentState.GetProperty(Properties.HP) <= 20) {
+                else if (action.Name.Contains("Dragon") && (int)parentState.GetProperty(Properties.HP) <= 36) {
                     h = 0;
                 }
             }
