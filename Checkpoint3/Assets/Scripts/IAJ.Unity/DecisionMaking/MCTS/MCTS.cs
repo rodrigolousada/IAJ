@@ -87,8 +87,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             while ((timeInFrame < this.MaxProcessingTimePerFrame) && (this.CurrentIterations < this.MaxIterations)) {
                 var node1 = this.Selection(selectedNode);
                 reward = this.Playout(node1.State);
-                //var reward2 = this.Playout(node1.State);
-                //reward = (reward.Value > reward2.Value ? reward : reward2);
+                var reward2 = this.Playout(node1.State);
+                reward = (reward.Value > reward2.Value ? reward : reward2);
                 //var reward3 = this.Playout(node1.State);
                 //reward = (reward.Value > reward3.Value ? reward : reward3);
                 this.Backpropagate(node1, reward);
@@ -137,9 +137,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             while (!currentNode.State.IsTerminal()) {
                 nextAction = currentNode.State.GetNextAction();
                 if (nextAction != null) {
-                    //if (this.ApplyCuts && this.ToCut(currentNode.State, nextAction)) {
-                    //    continue;
-                    //}
                     return Expand(currentNode, nextAction);
                 }
                 else {
@@ -263,8 +260,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             MCTSNode bestChild = null;
 
             foreach(var childNode in childNodes) {
-                //if (this.ApplyCuts && this.ToCut(node.State, childNode.Action))
-                //    continue;
                 if (this.RobustMCTS)
                     currentUCT = childNode.N;
                 else

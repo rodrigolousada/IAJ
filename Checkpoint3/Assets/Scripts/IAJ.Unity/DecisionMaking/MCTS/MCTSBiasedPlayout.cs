@@ -88,9 +88,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 distance = action.GetDuration(parentState);
                 h += Mathf.Abs(((8 - distance) / 8) * 12);
 
-                //if (action.Name.Contains("Chest") && action.CanExecute()) {
-                //    h += 20;
-                //}
+                if (action.Name.Contains("Chest") && (int)parentState.GetProperty(Properties.LEVEL) == 3) {
+                    h = 0;
+                }
                 if (action.Name.StartsWith("GetHealthPotion") && (int)parentState.GetProperty(Properties.SHIELDHP)==0 && (int)parentState.GetProperty(Properties.HP) < (int)parentState.GetProperty(Properties.MAXHP)*0.3) {
                     h += 10;
                 }
