@@ -45,13 +45,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 double heuristic_total = 0;
 
                 foreach (var action in actions) {
-                    if (action.CanExecute())
-                    {
-                        var h = CalcHeuristic(state, action);
-                        heuristic_total += Math.Exp(h);
-                        heuristicValues.Add(heuristic_total);
-                    }
-                  
+                    var h = CalcHeuristic(state, action);
+                    heuristic_total += Math.Exp(h);
+                    heuristicValues.Add(heuristic_total);
                 }
                 var random = RandomNumberBetween(0, heuristic_total);
                 for (int i = 0; i < heuristicValues.Count; i++) {
@@ -107,10 +103,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             }
             else {
                 h += 10;
-            }
-
-            if(!action.CanExecute()){
-                h = 0;
             }
             return h;
         }

@@ -210,6 +210,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         public ArrayWorldModel(ArrayWorldModel parent) {
                 string[] properties = {
                 GameManager.Properties.HP,
+                GameManager.Properties.SHIELDHP,
                 GameManager.Properties.LEVEL,
                 GameManager.Properties.MANA,
                 GameManager.Properties.MAXHP,
@@ -276,27 +277,28 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         {
             switch (propertyName) {
                 case GameManager.Properties.HP: return 0;
-                case GameManager.Properties.LEVEL: return 1;
-                case GameManager.Properties.MANA: return 2;
-                case GameManager.Properties.MAXHP: return 3;
-                case GameManager.Properties.MONEY: return 4;
-                case GameManager.Properties.POSITION: return 5;
-                case GameManager.Properties.TIME: return 6;
-                case GameManager.Properties.XP: return 7;
-                case "Skeleton1": return 8;
-                case "Skeleton2": return 9;
-                case "Orc1": return 10;
-                case "Orc2": return 11;
-                case "Dragon": return 12;
-                case "Chest1": return 13;
-                case "Chest2": return 14;
-                case "Chest3": return 15;
-                case "Chest4": return 16;
-                case "Chest5": return 17;
-                case "ManaPotion1": return 18;
-                case "ManaPotion2": return 19;
-                case "HealthPotion1": return 20;
-                case "HealthPotion2": return 21;
+                case GameManager.Properties.SHIELDHP: return 1;
+                case GameManager.Properties.LEVEL: return 2;
+                case GameManager.Properties.MANA: return 3;
+                case GameManager.Properties.MAXHP: return 4;
+                case GameManager.Properties.MONEY: return 5;
+                case GameManager.Properties.POSITION: return 6;
+                case GameManager.Properties.TIME: return 7;
+                case GameManager.Properties.XP: return 8;
+                case "Skeleton1": return 9;
+                case "Skeleton2": return 10;
+                case "Orc1": return 11;
+                case "Orc2": return 12;
+                case "Dragon": return 13;
+                case "Chest1": return 14;
+                case "Chest2": return 15;
+                case "Chest3": return 16;
+                case "Chest4": return 17;
+                case "Chest5": return 18;
+                case "ManaPotion1": return 19;
+                case "ManaPotion2": return 20;
+                case "HealthPotion1": return 21;
+                case "HealthPotion2": return 22;
                 default: return -1;
             }
         }

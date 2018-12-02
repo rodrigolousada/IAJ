@@ -345,7 +345,6 @@ namespace Assets.Scripts
 
             //coment after
             this.BestActionText.text = "Current Action: ";
-            this.BestActionText.text = "Current Action: ";
 
             if (this.CurrentAction != null)
                 this.BestActionText.text += this.CurrentAction.Name;
