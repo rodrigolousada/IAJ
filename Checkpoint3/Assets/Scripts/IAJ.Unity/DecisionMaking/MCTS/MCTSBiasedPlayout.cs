@@ -12,6 +12,14 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         public MCTSBiasedPlayout(CurrentStateWorldModel currentStateWorldModel) : base(currentStateWorldModel)
         {
         }
+        private static readonly System.Random random = new System.Random();
+
+        private static double RandomNumberBetween(double minValue, double maxValue)
+        {
+            var next = random.NextDouble();
+
+            return minValue + (next * (maxValue - minValue));
+        }
 
         protected override Reward Playout(WorldModel initialPlayoutState)
         {
@@ -33,15 +41,19 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             }
 
             while (!state.IsTerminal()) {
-                List<float> heuristicValues = new List<float>();
-                float heuristic_total = 0;
+                List<double> heuristicValues = new List<double>();
+                double heuristic_total = 0;
 
                 foreach (var action in actions) {
-                    var h = CalcHeuristic(state, action);
-                    heuristic_total += h;
-                    heuristicValues.Add(heuristic_total);
+                    if (action.CanExecute())
+                    {
+                        var h = CalcHeuristic(state, action);
+                        heuristic_total += Math.Exp(h);
+                        heuristicValues.Add(heuristic_total);
+                    }
+                  
                 }
-                var random = UnityEngine.Random.Range(0, heuristic_total);
+                var random = RandomNumberBetween(0, heuristic_total);
                 for (int i = 0; i < heuristicValues.Count; i++) {
                     if (random <= heuristicValues[i]) {
                         var action = actions[i];
@@ -61,19 +73,19 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         {
             //TODO: implement
             WalkToTargetAndExecuteAction walk_action = action as WalkToTargetAndExecuteAction;
-            float h = 10;
+            float h = 2;
 
             if (action.Name.StartsWith("LevelUp") && action.CanExecute(parentState)) {
                 h += 10000;
             }
             if (action.Name.StartsWith("DivineWrath") && action.CanExecute(parentState)) {
-                h += 10000;
+                h += 10000000000;
             }
 
             float distance;
             if (walk_action != null) {
                 distance = action.GetDuration(parentState);
-                h += Mathf.Abs(100/(distance+1));
+                h += Mathf.Abs(((8 - distance) / 8) * 12);
 
                 //if (action.Name.Contains("Chest") && action.CanExecute()) {
                 //    h += 20;
@@ -81,14 +93,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 if (action.Name.StartsWith("GetHealthPotion") && (int)parentState.GetProperty(Properties.SHIELDHP)==0 && (int)parentState.GetProperty(Properties.HP) < (int)parentState.GetProperty(Properties.MAXHP)*0.3) {
                     h += 10;
                 }
-                else if (action.Name.StartsWith("GetHealthPotion") && (int)parentState.GetProperty(Properties.HP)+(int)parentState.GetProperty(Properties.SHIELDHP) >= (int)parentState.GetProperty(Properties.MAXHP) * 0.4) {
-                    h -= 8;
-                }
 
                 if (action.Name.Contains("Skeleton") && (int)parentState.GetProperty(Properties.HP) <= 5) {
                     h = 0;
                 }
-                else { h += 5; }
+                else { h += 200; }
                 if (action.Name.Contains("Orc") && (int)parentState.GetProperty(Properties.HP) <= 10) {
                     h = 0;
                 }
