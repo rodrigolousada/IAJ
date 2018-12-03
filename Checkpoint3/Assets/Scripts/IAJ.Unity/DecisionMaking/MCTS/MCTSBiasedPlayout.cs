@@ -9,7 +9,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 {
     public class MCTSBiasedPlayout : MCTS
     {
-        public const int MAX_DEPTH = 5;
+        public const int MCTS_MAX_DEPTH = 5;
         public bool depthLimited = false;
 
         public MCTSBiasedPlayout(CurrentStateWorldModel currentStateWorldModel) : base(currentStateWorldModel)
@@ -31,6 +31,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             var actions = state.GetExecutableActions();
             Reward reward = new Reward();
             var CurrentDepth = 0;
+            //var heuristic_value = 0f;
 
             if (actions.Length == 0) {
                 reward.Value = 0;
@@ -38,8 +39,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 return reward;
             }
 
-            while (!state.IsTerminal() && (!depthLimited||CurrentDepth<MAX_DEPTH)) {
-                List<double> heuristicValues = new List<double>();
+            while (!state.IsTerminal() && (!depthLimited||CurrentDepth < MCTS_MAX_DEPTH)) {
+                List<float> heuristicValues = new List<float>();
                 float heuristic_total = 0;
 
                 foreach (var action in actions) {
@@ -54,12 +55,22 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                         action.ApplyActionEffects(state);
                         state.CalculateNextPlayer();
                         state = state.GenerateChildWorldModel();
+                        //if (i != 0)
+                        //    heuristic_value = heuristicValues[i] - heuristicValues[i - 1];
+                        //else
+                        //    heuristic_value = heuristicValues[i];
                         break;
                     }
                 }
                 CurrentDepth += 1;
             }
-            reward.Value = state.GetScore();
+
+            //if(depthLimited && CurrentDepth >= MCTS_MAX_DEPTH) {
+            //    reward.Value = heuristic_value;
+            //}
+            //else {
+                reward.Value = state.GetScore();
+            //}
             reward.PlayerID = state.GetNextPlayer();
             return reward;
         }
@@ -70,28 +81,23 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             WalkToTargetAndExecuteAction walk_action = action as WalkToTargetAndExecuteAction;
             float h = 2;
 
-            Debug.Log(action.Name);
-
             if (action.Name.StartsWith("LevelUp") && action.CanExecute(parentState)) {
-                h += 10000;
+                h += 100;
             }
             if (action.Name.StartsWith("DivineWrath") && action.CanExecute(parentState)) {
-                h += 10000000000;
+                h += 100;
             }
 
             float euclidian_distance;
             if (walk_action != null) {
                 euclidian_distance = action.GetDuration(parentState);
-                h += Mathf.Abs(((8 - euclidian_distance) / 8) * 12) * 12;
+                h += Mathf.Abs(12 - (3/2)*euclidian_distance);
 
-                if (action.Name.StartsWith("GetHealthPotion") && (int)parentState.GetProperty(Properties.SHIELDHP)==0 && (int)parentState.GetProperty(Properties.HP) < (int)parentState.GetProperty(Properties.MAXHP)) {
-                    h += 10;
+                if (action.Name.StartsWith("GetHealthPotion") && (int)parentState.GetProperty(Properties.HP) < (int)parentState.GetProperty(Properties.MAXHP)*0.3) {
+                    h += 20;
                 }
-                else if (action.Name.Contains("Skeleton") && (int)parentState.GetProperty(Properties.HP) <= 5) {
+                else if (action.Name.Contains("Skeleton") && (int)parentState.GetProperty(Properties.HP) <= 6) {
                     h = 0;
-                }
-                else if(action.Name.Contains("Skeleton")) {
-                    h += 200;
                 }
                 else if (action.Name.Contains("Orc") && (int)parentState.GetProperty(Properties.HP) <= 20) {
                     h = 0;
@@ -103,7 +109,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             else {
                 h += 12;
             }
-            Debug.Log(h);
             return h;
         }
     }

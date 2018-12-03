@@ -25,7 +25,7 @@ namespace Assets.Scripts
         public const string BE_QUICK_GOAL = "BeQuick";
         public const string GET_RICH_GOAL = "GetRich";
 
-        public const float DECISION_MAKING_INTERVAL = 10.0f;
+        public const float DECISION_MAKING_INTERVAL = 100.0f;
         //public fields to be set in Unity Editor
         public GameManager.GameManager GameManager;
         public Text SurviveGoalText;
@@ -73,8 +73,8 @@ namespace Assets.Scripts
             this.navMesh = navMeshGraph;
             this.AStarPathFinding = pathfindingAlgorithm;
             this.AStarPathFinding.NodesPerFrame = 100;
-            this.MCTSActive = false;
-            this.MCTSBiased = false;
+            this.MCTSActive = true;
+            this.MCTSBiased = true;
 
 
             this.characterAnimator = this.GetComponentInChildren<Animator> ();

@@ -66,37 +66,30 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         }
 
 
-        //private bool AvoidChestsWithGuard(WorldModel parent, GOB.Action action)
-        //{
-        //    if (!(bool)parent.GetProperty("Skeleton1")) {
-        //        if ((bool)parent.GetProperty("Chest1")) {
-        //            return !action.Name.Equals("PickUpChest(Chest1)");
-        //        }
-        //    }
-        //    if (!(bool)parent.GetProperty("Orc2")) {
-        //        if ((bool)parent.GetProperty("Chest2")) {
-        //            return !action.Name.Equals("PickUpChest(Chest2)");
-        //        }
-        //    }
-        //    if (!(bool)parent.GetProperty("Orc1"))
-        //    {
-        //        if ((bool)parent.GetProperty("Chest3"))
-        //        {
-        //            return !action.Name.Equals("PickUpChest(Chest3)");
-        //        }
-        //    }
-        //    if (!(bool)parent.GetProperty("Skeleton2")) {
-        //        if ((bool)parent.GetProperty("Chest4")) {
-        //            return !action.Name.Equals("PickUpChest(Chest4)");
-        //        }
-        //    }
-        //    if (!(bool)parent.GetProperty("Dragon")) {
-        //        if ((bool)parent.GetProperty("Chest5")) {
-        //            return !action.Name.Equals("PickUpChest(Chest5)");
-        //        }
-        //    }
-        //    return false;
-        //}
+        private bool AvoidChestsWithGuard(WorldModel parent, GOB.Action action)
+        {
+            if (action.Name.Equals("PickUpChest(Chest1)"))
+            {
+                 return (bool)parent.GetProperty("Skeleton1");
+            }
+            if (action.Name.Equals("PickUpChest(Chest2)"))
+            {
+                return (bool)parent.GetProperty("Orc2");
+            }
+            if (action.Name.Equals("PickUpChest(Chest3)"))
+            {
+                 return (bool)parent.GetProperty("Orc1");
+            }
+            if (action.Name.Equals("PickUpChest(Chest4)"))
+            {
+                 return (bool)parent.GetProperty("Skeleton2");
+            }
+            if (action.Name.Equals("PickUpChest(Chest5)"))
+            {
+                 return (bool)parent.GetProperty("Dragon");
+            }
+            return false;
+        }
 
         public GOB.Action Run()
         {
@@ -170,9 +163,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             while (!currentNode.State.IsTerminal()) {
                 nextAction = currentNode.State.GetNextAction();
                 if (nextAction != null) {
-                    //if (this.AvoidChestsWithGuard(currentNode.State, nextAction)) {
-                    //    continue;
-                    //}
+                    if (this.AvoidChestsWithGuard(currentNode.State, nextAction)) {
+                        continue;
+                    }
                     return Expand(currentNode, nextAction);
                 }
                 else {
@@ -296,8 +289,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             MCTSNode bestChild = null;
 
             foreach(var childNode in childNodes) {
-                //if (this.AvoidChestsWithGuard(node.State, childNode.Action))                  
-                //    continue;
+                if (this.AvoidChestsWithGuard(node.State, childNode.Action))                  
+                    continue;
                 if (this.IsRobust)
                     currentUCT = childNode.N;
                 else
