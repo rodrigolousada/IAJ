@@ -68,7 +68,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         }
 
 
-        private bool AvoidChestsWithGuard(WorldModel parent, GOB.Action action)
+        private bool AvoidDummyMove(WorldModel parent, GOB.Action action)
         {
             if (action.Name.Equals("PickUpChest(Chest1)"))
             {
@@ -178,7 +178,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             while (!currentNode.State.IsTerminal()) {
                 nextAction = currentNode.State.GetNextAction();
                 if (nextAction != null) {
-                    if (this.IsOptimized && this.AvoidChestsWithGuard(currentNode.State, nextAction)) {
+                    if (this.IsOptimized && this.AvoidDummyMove(currentNode.State, nextAction)) {
                         continue;
                     }
                     return Expand(currentNode, nextAction);
@@ -310,7 +310,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             MCTSNode bestChild = null;
 
             foreach(var childNode in childNodes) {
-                if (this.IsOptimized && this.AvoidChestsWithGuard(node.State, childNode.Action))                  
+                if (this.IsOptimized && this.AvoidDummyMove(node.State, childNode.Action))                  
                     continue;
                 if (this.IsRobust)
                     currentUCT = childNode.N;
