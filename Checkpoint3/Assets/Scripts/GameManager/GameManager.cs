@@ -29,6 +29,8 @@ namespace Assets.Scripts.GameManager
         public List<GameObject> orcs;
         public List<GameObject> dragons;
         public List<GameObject> enemies;
+        public List<string> enemiesString;
+        public List<string> chestsString;
 
         public CharacterData characterData;
         public bool WorldChanged { get; set; }
@@ -40,7 +42,7 @@ namespace Assets.Scripts.GameManager
 
         public void Start()
         {
-            this.WorldChanged = false;
+            this.WorldChanged = true; //false
             this.characterData = new CharacterData(this.character);
             this.previousPosition = this.character.transform.position;
 
@@ -52,7 +54,17 @@ namespace Assets.Scripts.GameManager
             this.enemies.AddRange(this.orcs);
             this.dragons = GameObject.FindGameObjectsWithTag("Dragon").ToList();
             this.enemies.AddRange(this.dragons);
-            
+            this.enemiesString = new List<string>();
+            this.chestsString = new List<string>();
+
+            foreach (var enemy in this.enemies) {
+                this.enemiesString.Add(enemy.name);
+            }
+
+            foreach (var enemy in this.chests) {
+                this.chestsString.Add(enemy.name);
+            }
+
         }
 
         public void Update()
@@ -149,6 +161,7 @@ namespace Assets.Scripts.GameManager
                 {
                     //there was an hit, enemy is destroyed, gain xp
                     this.enemies.Remove(enemy);
+                    this.enemiesString.Remove(enemy.name);
                     enemy.SetActive(false);
                     Object.Destroy(enemy);
                     this.characterData.XP += xpGain;
@@ -174,6 +187,7 @@ namespace Assets.Scripts.GameManager
                 {
                     this.characterData.XP += 3;
                     this.enemies.Remove(enemy);
+                    this.enemiesString.Remove(enemy.name);
                     enemy.SetActive(false);
                     Object.Destroy(enemy);
                 }
@@ -208,7 +222,7 @@ namespace Assets.Scripts.GameManager
 
         public void DivineWrath()
         {
-            if(this.characterData.Level >= 3 && this.characterData.Mana >= 10 && this.enemies!=null)
+            if(this.characterData.Level >= 3 && this.characterData.Mana >= 10 && this.enemies != null)
             {
                 //kill all enemies in the map
                 foreach (var enemy in this.enemies)
@@ -227,6 +241,7 @@ namespace Assets.Scripts.GameManager
                     }
 
                     enemy.SetActive(false);
+                    this.enemiesString.Remove(enemy.name);
                     Object.Destroy(enemy);
                 }
 
@@ -241,6 +256,7 @@ namespace Assets.Scripts.GameManager
             if (chest != null && chest.activeSelf && InChestRange(chest))
             {
                 this.chests.Remove(chest);
+                this.chestsString.Remove(chest.name);
                 Object.Destroy(chest);
                 this.characterData.Money += 5;
                 this.WorldChanged = true;

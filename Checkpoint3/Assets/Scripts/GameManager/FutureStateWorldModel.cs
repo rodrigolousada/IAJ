@@ -40,14 +40,16 @@ namespace Assets.Scripts.GameManager
         public override float GetScore()
         {
             int money = (int)this.GetProperty(Properties.MONEY);
+            float time = (float)this.GetProperty(Properties.TIME);
             int HP = (int)this.GetProperty(Properties.HP);
+            int XP = (int)this.GetProperty(Properties.XP);
+            int level = (int)this.GetProperty(Properties.LEVEL);
 
-            if (HP <= 0) return 0.0f;
-            else if (money == 25)
-            {
-                return 1.0f;
-            }
-            else return 0.0f;
+            if (HP <= 0)
+                return 0;
+            if (money < 25)
+                money = money / 4;
+            return money + (200 - time) * 0.2f + (level - 3)*10;
         }
 
         public override int GetNextPlayer()

@@ -9,20 +9,14 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 {
     public class MCTSBiasedPlayout : MCTS
     {
-        public const int MAX_DEPTH = 3;
-        public bool depthLimited = true;
+        public const int MAX_DEPTH = 5;
+        public bool depthLimited = false;
 
         public MCTSBiasedPlayout(CurrentStateWorldModel currentStateWorldModel) : base(currentStateWorldModel)
         {
         }
         private static readonly System.Random random = new System.Random();
 
-        private static double RandomNumberBetween(double minValue, double maxValue)
-        {
-            var next = random.NextDouble();
-
-            return minValue + (next * (maxValue - minValue));
-        }
 
         protected override Reward Playout(WorldModel initialPlayoutState)
         {
@@ -46,14 +40,14 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
             while (!state.IsTerminal() && (!depthLimited||CurrentDepth<MAX_DEPTH)) {
                 List<double> heuristicValues = new List<double>();
-                double heuristic_total = 0;
+                float heuristic_total = 0;
 
                 foreach (var action in actions) {
                     var h = CalcHeuristic(state, action);
-                    heuristic_total += Math.Exp(h);
+                    heuristic_total += h;
                     heuristicValues.Add(heuristic_total);
                 }
-                var random = RandomNumberBetween(0, heuristic_total);
+                var random = UnityEngine.Random.Range(0, heuristic_total);
                 for (int i = 0; i < heuristicValues.Count; i++) {
                     if (random <= heuristicValues[i]) {
                         var action = actions[i];
@@ -76,6 +70,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             WalkToTargetAndExecuteAction walk_action = action as WalkToTargetAndExecuteAction;
             float h = 2;
 
+            Debug.Log(action.Name);
+
             if (action.Name.StartsWith("LevelUp") && action.CanExecute(parentState)) {
                 h += 10000;
             }
@@ -83,25 +79,21 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 h += 10000000000;
             }
 
-            float distance;
+            float euclidian_distance;
             if (walk_action != null) {
-                distance = action.GetDuration(parentState);
-                h += Mathf.Abs(((8 - distance) / 8) * 12);
+                euclidian_distance = action.GetDuration(parentState);
+                h += Mathf.Abs(((8 - euclidian_distance) / 8) * 12) * 12;
 
-                if (action.Name.Contains("Chest") && (int)parentState.GetProperty(Properties.LEVEL) == 3) {
-                    h = 0;
-                }
-                if (action.Name.StartsWith("GetHealthPotion") && (int)parentState.GetProperty(Properties.SHIELDHP)==0 && (int)parentState.GetProperty(Properties.HP) < (int)parentState.GetProperty(Properties.MAXHP)*0.3) {
+                if (action.Name.StartsWith("GetHealthPotion") && (int)parentState.GetProperty(Properties.SHIELDHP)==0 && (int)parentState.GetProperty(Properties.HP) < (int)parentState.GetProperty(Properties.MAXHP)) {
                     h += 10;
                 }
-
-                if (action.Name.Contains("Skeleton") && (int)parentState.GetProperty(Properties.HP) <= 6) {
+                else if (action.Name.Contains("Skeleton") && (int)parentState.GetProperty(Properties.HP) <= 5) {
                     h = 0;
                 }
                 else if(action.Name.Contains("Skeleton")) {
                     h += 200;
                 }
-                if (action.Name.Contains("Orc") && (int)parentState.GetProperty(Properties.HP) <= 20) {
+                else if (action.Name.Contains("Orc") && (int)parentState.GetProperty(Properties.HP) <= 20) {
                     h = 0;
                 }
                 else if (action.Name.Contains("Dragon") && (int)parentState.GetProperty(Properties.HP) <= 36) {
@@ -109,8 +101,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 }
             }
             else {
-                h += 10;
+                h += 12;
             }
+            Debug.Log(h);
             return h;
         }
     }

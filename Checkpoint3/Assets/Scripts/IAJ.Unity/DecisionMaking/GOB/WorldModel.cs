@@ -54,17 +54,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
             this.ActionEnumerator.Reset();
         }
 
-        //public static Type Foo<T>(T param)
-        //{
-        //    return typeof(T);
-        //}
-
-        ////Useful to Debug Dictionarys by using reflection to find the generic object real type
-        //public static Type CallFoo(object param)
-        //{
-        //    return (Type)typeof(WorldModel).GetMethod("Foo").MakeGenericMethod(new[] { param.GetType() }).Invoke(null, new[] { param });
-        //}
-
         public virtual object GetProperty(string propertyName)
         {
             //recursive implementation of WorldModel
@@ -201,14 +190,14 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         protected ArrayWorldModel Parent { get; set; }
 
         public ArrayWorldModel(List<Action> actions) {
-            this.Properties = new object[13];
+            this.Properties = new object[29];
             this.GoalValues = new float[4];
             this.Actions = actions;
             this.ActionEnumerator = actions.GetEnumerator();
         }
 
         public ArrayWorldModel(ArrayWorldModel parent) {
-                string[] properties = {
+             string[] properties = {
                 GameManager.Properties.HP,
                 GameManager.Properties.SHIELDHP,
                 GameManager.Properties.LEVEL,
@@ -265,17 +254,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         {
             this.ActionEnumerator.Reset();
         }
-
-        //public static Type Foo<T>(T param)
-        //{
-        //    return typeof(T);
-        //}
-
-        ////Useful to Debug Dictionarys by using reflection to find the generic object real type
-        //public static Type CallFoo(object param)
-        //{
-        //    return (Type)typeof(WorldModel).GetMethod("Foo").MakeGenericMethod(new[] { param.GetType() }).Invoke(null, new[] { param });
-        //}
 
         //Compiled to constant time resolution
         private int getPropertyIndex(string propertyName)

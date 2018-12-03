@@ -47,10 +47,10 @@ namespace Assets.Scripts.GameManager
             if (propertyName.Equals(Properties.POSITION))
                 return this.GameManager.characterData.CharacterGameObject.transform.position;
 
-            if (this.GameManager.enemies.Select(i => i.name).ToList().Contains(propertyName))
+            if (this.GameManager.enemiesString.Contains(propertyName))
                 return true;
 
-            if (this.GameManager.chests.Select(i => i.name).ToList().Contains(propertyName))
+            if (this.GameManager.chestsString.Contains(propertyName))
                 return true;
 
             if (propertyName.Contains("ManaPotion")) return true;

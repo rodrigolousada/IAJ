@@ -12,15 +12,15 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         public bool InProgress { get; private set; }
         public int MaxIterations { get; set; }
         public int MaxIterationsProcessedPerFrame { get; set; }
-        public int MaxProcessingTimePerFrame { get; set; } //comment
-        public int TotalIterations { get; set; } //comment
-        public bool IsInfinite { get; set; } //comment
         public int MaxPlayoutDepthReached { get; private set; }
         public int MaxSelectionDepthReached { get; private set; }
         public float TotalProcessingTime { get; private set; }
         public MCTSNode BestFirstChild { get; set; }
         public List<GOB.Action> BestActionSequence { get; private set; }
-
+        public int MaxProcessingTimePerFrame { get; set; }
+        public int TotalIterations { get; set; }
+        public bool IsInfinite { get; set; }
+        public bool IsRobust { get; set; }
 
         protected int CurrentIterations { get; set; }
         protected int CurrentIterationsInFrame { get; set; }
@@ -30,19 +30,19 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         protected MCTSNode InitialNode { get; set; }
         protected System.Random RandomGenerator { get; set; }
 
-        public bool RobustMCTS { get; set; } //comment
-
         public MCTS(CurrentStateWorldModel currentStateWorldModel)
         {
             this.InProgress = false;
-            this.IsInfinite = false; //comment
+            this.IsInfinite = false;
             this.CurrentStateWorldModel = currentStateWorldModel;
             this.MaxIterations = 100;
             this.MaxIterationsProcessedPerFrame = 10;
-            this.MaxProcessingTimePerFrame = 5; //comment
-            this.TotalIterations = 0; //comment
+            this.MaxProcessingTimePerFrame = 5;
+            this.TotalIterations = 0;
             this.RandomGenerator = new System.Random();
-            this.RobustMCTS = true; //comment
+            this.IsRobust = true;
+            this.CurrentDepth = 0;
+            this.TotalIterations = 0;
         }
 
 
@@ -65,6 +65,39 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             this.BestActionSequence = new List<GOB.Action>();
         }
 
+
+        //private bool AvoidChestsWithGuard(WorldModel parent, GOB.Action action)
+        //{
+        //    if (!(bool)parent.GetProperty("Skeleton1")) {
+        //        if ((bool)parent.GetProperty("Chest1")) {
+        //            return !action.Name.Equals("PickUpChest(Chest1)");
+        //        }
+        //    }
+        //    if (!(bool)parent.GetProperty("Orc2")) {
+        //        if ((bool)parent.GetProperty("Chest2")) {
+        //            return !action.Name.Equals("PickUpChest(Chest2)");
+        //        }
+        //    }
+        //    if (!(bool)parent.GetProperty("Orc1"))
+        //    {
+        //        if ((bool)parent.GetProperty("Chest3"))
+        //        {
+        //            return !action.Name.Equals("PickUpChest(Chest3)");
+        //        }
+        //    }
+        //    if (!(bool)parent.GetProperty("Skeleton2")) {
+        //        if ((bool)parent.GetProperty("Chest4")) {
+        //            return !action.Name.Equals("PickUpChest(Chest4)");
+        //        }
+        //    }
+        //    if (!(bool)parent.GetProperty("Dragon")) {
+        //        if ((bool)parent.GetProperty("Chest5")) {
+        //            return !action.Name.Equals("PickUpChest(Chest5)");
+        //        }
+        //    }
+        //    return false;
+        //}
+
         public GOB.Action Run()
         {
             MCTSNode selectedNode = this.InitialNode;
@@ -84,16 +117,16 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
             float timeInFrame = 0f;
 
-            while ((timeInFrame < this.MaxProcessingTimePerFrame) && (this.CurrentIterations < this.MaxIterations)) {
+            while (timeInFrame < this.MaxProcessingTimePerFrame) {
                 var node1 = this.Selection(selectedNode);
                 reward = this.Playout(node1.State);
-                var reward2 = this.Playout(node1.State);
-                reward = (reward.Value > reward2.Value ? reward : reward2);
+                //var reward2 = this.Playout(node1.State);
+                //reward = (reward.Value > reward2.Value ? reward : reward2);
                 //var reward3 = this.Playout(node1.State);
                 //reward = (reward.Value > reward3.Value ? reward : reward3);
                 this.Backpropagate(node1, reward);
 
-                timeInFrame = Time.realtimeSinceStartup - startTime;
+                timeInFrame += Time.realtimeSinceStartup - startTime;
                 this.CurrentIterations += 1;
                 this.TotalIterations += 1;
             }
@@ -137,6 +170,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             while (!currentNode.State.IsTerminal()) {
                 nextAction = currentNode.State.GetNextAction();
                 if (nextAction != null) {
+                    //if (this.AvoidChestsWithGuard(currentNode.State, nextAction)) {
+                    //    continue;
+                    //}
                     return Expand(currentNode, nextAction);
                 }
                 else {
@@ -260,7 +296,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             MCTSNode bestChild = null;
 
             foreach(var childNode in childNodes) {
-                if (this.RobustMCTS)
+                //if (this.AvoidChestsWithGuard(node.State, childNode.Action))                  
+                //    continue;
+                if (this.IsRobust)
                     currentUCT = childNode.N;
                 else
                     currentUCT = (childNode.Q / childNode.N);
