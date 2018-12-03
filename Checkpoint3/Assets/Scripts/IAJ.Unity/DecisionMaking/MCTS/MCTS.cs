@@ -21,6 +21,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         public int TotalIterations { get; set; }
         public bool IsInfinite { get; set; }
         public bool IsRobust { get; set; }
+        public bool IsOptimized { get; set; }
 
         protected int CurrentIterations { get; set; }
         protected int CurrentIterationsInFrame { get; set; }
@@ -43,6 +44,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             this.IsRobust = true;
             this.CurrentDepth = 0;
             this.TotalIterations = 0;
+            this.IsOptimized = true;
         }
 
 
@@ -176,7 +178,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             while (!currentNode.State.IsTerminal()) {
                 nextAction = currentNode.State.GetNextAction();
                 if (nextAction != null) {
-                    if (this.AvoidChestsWithGuard(currentNode.State, nextAction)) {
+                    if (this.IsOptimized && this.AvoidChestsWithGuard(currentNode.State, nextAction)) {
                         continue;
                     }
                     return Expand(currentNode, nextAction);
@@ -285,7 +287,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 var exploitation = (childNode.Q / childNode.N);
                 var exploration = C * Mathf.Sqrt(parentLog / childNode.N);
                 var heuristic = childNode.H;
-                currentUCT = exploitation + exploration + heuristic;
+                currentUCT = exploitation + exploration;
+                if(this.IsOptimized) currentUCT += heuristic;
 
                 if(currentUCT > bestUCT) {
                     bestUCT = currentUCT;
@@ -307,7 +310,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             MCTSNode bestChild = null;
 
             foreach(var childNode in childNodes) {
-                if (this.AvoidChestsWithGuard(node.State, childNode.Action))                  
+                if (this.IsOptimized && this.AvoidChestsWithGuard(node.State, childNode.Action))                  
                     continue;
                 if (this.IsRobust)
                     currentUCT = childNode.N;
