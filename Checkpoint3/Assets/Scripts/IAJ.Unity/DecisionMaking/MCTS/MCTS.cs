@@ -88,6 +88,18 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             {
                  return (bool)parent.GetProperty("Dragon");
             }
+            if (action.Name.Contains("Skeleton"))
+            {
+                return (int)parent.GetProperty(Properties.HP) + (int)parent.GetProperty(Properties.SHIELDHP) < 5;
+            }
+            if (action.Name.Contains("Orc"))
+            {
+                return (int)parent.GetProperty(Properties.HP) + (int)parent.GetProperty(Properties.SHIELDHP) < 20;
+            }
+            if (action.Name.Contains("Dragon"))
+            {
+                return (int)parent.GetProperty(Properties.HP) + (int)parent.GetProperty(Properties.SHIELDHP) < 36;
+            }
             return false;
         }
 
@@ -170,8 +182,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 }
                 else {
                     if (currentNode.ChildNodes.Count > 0) {
-                        bestChild = currentNode;
-                        currentNode = this.BestUCTChild(currentNode);
+                        bestChild = this.BestUCTChild(currentNode);
+                        if (bestChild == null)
+                            return currentNode;
+                        currentNode = bestChild;
                         this.CurrentDepth++;
                         if (this.CurrentDepth > this.MaxSelectionDepthReached)
                             this.MaxSelectionDepthReached = this.CurrentDepth;

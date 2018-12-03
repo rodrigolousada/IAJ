@@ -10,7 +10,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
     public class MCTSBiasedPlayout : MCTS
     {
         public const int MCTS_MAX_DEPTH = 5;
-        public bool depthLimited = false;
+        public bool depthLimited = true;
 
         public MCTSBiasedPlayout(CurrentStateWorldModel currentStateWorldModel) : base(currentStateWorldModel)
         {

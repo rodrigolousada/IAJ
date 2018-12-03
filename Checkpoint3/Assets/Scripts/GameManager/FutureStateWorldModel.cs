@@ -44,12 +44,16 @@ namespace Assets.Scripts.GameManager
             int HP = (int)this.GetProperty(Properties.HP);
             int XP = (int)this.GetProperty(Properties.XP);
             int level = (int)this.GetProperty(Properties.LEVEL);
+            int shield = (int)this.GetProperty(Properties.SHIELDHP);
 
             if (HP <= 0)
                 return 0;
             if (money < 25)
                 money = money / 4;
-            return money + (200 - time) * 0.2f + (level - 3)*10;
+            //var score = money + (200 - time) * 0.2f + (level - 3)*10 + XP;
+            //return score / (25 + (200) * 0.2f + 40;
+            var score = (money / 10 + level*100 + XP/5 + shield + HP) / time;
+            return score / 500f;
         }
 
         public override int GetNextPlayer()
