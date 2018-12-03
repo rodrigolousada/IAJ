@@ -86,7 +86,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             }
             if (action.Name.Equals("PickUpChest(Chest5)"))
             {
-                 return (bool)parent.GetProperty("Dragon");
+                 return (bool)parent.GetProperty("Dragon") && ((bool)parent.GetProperty("Chest1") || (bool)parent.GetProperty("Chest2") || (bool)parent.GetProperty("Chest3") || (bool)parent.GetProperty("Chest4"));
             }
             if (action.Name.Contains("Skeleton"))
             {
@@ -98,7 +98,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             }
             if (action.Name.Contains("Dragon"))
             {
-                return (int)parent.GetProperty(Properties.HP) + (int)parent.GetProperty(Properties.SHIELDHP) < 36;
+                return (int)parent.GetProperty(Properties.HP) + (int)parent.GetProperty(Properties.SHIELDHP) < 30;
             }
             return false;
         }
@@ -158,9 +158,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         protected MCTSNode Selection(MCTSNode initialNode)
         {
             GOB.Action nextAction;
+            GOB.Action ignoredAction;
             MCTSNode currentNode = initialNode;
             MCTSNode bestChild;
-
+            
 
             //TODO: implement
 
@@ -262,8 +263,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             {
                 Action = action,
                 Parent = parent,
-                PlayerID = state.GetNextPlayer()
+                PlayerID = state.GetNextPlayer(),
+                H = action.GetHValue(state)
             };
+
             parent.ChildNodes.Add(child_node);
 
             return child_node;
@@ -281,7 +284,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             foreach(var childNode in node.ChildNodes) {
                 var exploitation = (childNode.Q / childNode.N);
                 var exploration = C * Mathf.Sqrt(parentLog / childNode.N);
-                currentUCT = exploitation + exploration;
+                var heuristic = childNode.H;
+                currentUCT = exploitation + exploration + heuristic;
 
                 if(currentUCT > bestUCT) {
                     bestUCT = currentUCT;

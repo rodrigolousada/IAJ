@@ -73,5 +73,11 @@ namespace Assets.Scripts.DecisionMakingActions
 
             worldModel.SetProperty(Properties.POSITION, Target.transform.position);
         }
+
+        public override float GetHValue(WorldModel worldModel)
+        {
+            //you would be dumb not to level up if possible
+            return 10 / this.GetDuration();
+        }
     }
 }

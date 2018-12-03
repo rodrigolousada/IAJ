@@ -31,7 +31,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             var actions = state.GetExecutableActions();
             Reward reward = new Reward();
             var CurrentDepth = 0;
-            //var heuristic_value = 0f;
 
             if (actions.Length == 0) {
                 reward.Value = 0;
@@ -55,22 +54,13 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                         action.ApplyActionEffects(state);
                         state.CalculateNextPlayer();
                         state = state.GenerateChildWorldModel();
-                        //if (i != 0)
-                        //    heuristic_value = heuristicValues[i] - heuristicValues[i - 1];
-                        //else
-                        //    heuristic_value = heuristicValues[i];
                         break;
                     }
                 }
                 CurrentDepth += 1;
             }
 
-            //if(depthLimited && CurrentDepth >= MCTS_MAX_DEPTH) {
-            //    reward.Value = heuristic_value;
-            //}
-            //else {
-                reward.Value = state.GetScore();
-            //}
+            reward.Value = state.GetScore();
             reward.PlayerID = state.GetNextPlayer();
             return reward;
         }
@@ -93,16 +83,16 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 euclidian_distance = action.GetDuration(parentState);
                 h += Mathf.Abs(12 - (3/2)*euclidian_distance);
 
-                if (action.Name.StartsWith("GetHealthPotion") && (int)parentState.GetProperty(Properties.HP) < (int)parentState.GetProperty(Properties.MAXHP)*0.3) {
+                if (action.Name.StartsWith("GetHealthPotion") && (int)parentState.GetProperty(Properties.HP)+(int)parentState.GetProperty(Properties.SHIELDHP) < (int)parentState.GetProperty(Properties.MAXHP)*0.3) {
                     h += 20;
                 }
-                else if (action.Name.Contains("Skeleton") && (int)parentState.GetProperty(Properties.HP) <= 6) {
+                else if (action.Name.Contains("Skeleton") && (int)parentState.GetProperty(Properties.HP) + (int)parentState.GetProperty(Properties.SHIELDHP) < 5) {
                     h = 0;
                 }
-                else if (action.Name.Contains("Orc") && (int)parentState.GetProperty(Properties.HP) <= 20) {
+                else if (action.Name.Contains("Orc") && (int)parentState.GetProperty(Properties.HP) + (int)parentState.GetProperty(Properties.SHIELDHP) < 20) {
                     h = 0;
                 }
-                else if (action.Name.Contains("Dragon") && (int)parentState.GetProperty(Properties.HP) <= 36) {
+                else if (action.Name.Contains("Dragon") && (int)parentState.GetProperty(Properties.HP) + (int)parentState.GetProperty(Properties.SHIELDHP) < 36) {
                     h = 0;
                 }
             }

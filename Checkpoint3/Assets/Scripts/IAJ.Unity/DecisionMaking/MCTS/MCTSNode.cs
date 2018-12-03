@@ -14,7 +14,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         //public int NRAVE { get; set; }
         public float Q { get; set; }
         //public float QRAVE { get; set; }
-        //public float H { get; set; }
+        public float H { get; set; }
         //public double AcumulatedE {get; set; }
 
         public MCTSNode(WorldModel state)
@@ -23,6 +23,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             this.ChildNodes = new List<MCTSNode>();
             this.Q = 0;
             this.N = 0;
+            this.H = 0;
         }
     }
 }

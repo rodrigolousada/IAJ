@@ -52,7 +52,7 @@ namespace Assets.Scripts.GameManager
                 money = money / 4;
             //var score = money + (200 - time) * 0.2f + (level - 3)*10 + XP;
             //return score / (25 + (200) * 0.2f + 40;
-            var score = (money / 10 + level*100 + XP/5 + shield + HP) / time;
+            var score = (money / 10 + level*100 + XP + shield + HP) / time;
             return score / 500f;
         }
 
